@@ -10,7 +10,7 @@ namespace DynShape {
         object GetIndex(Func<object> proceed, IEnumerable<object> keys);
         object SetIndex(Func<object> proceed, IEnumerable<object> keys, object value);
 
-        object Convert(Func<object> proceed, Type type, bool isExplicit);
+        object Convert(Func<object> proceed, dynamic self, Type type, bool isExplicit);
         object BinaryOperation(Func<object> proceed, ExpressionType operation, object value);
     }
 }

@@ -21,7 +21,7 @@ namespace DynShape.Behaviors {
             return Nil.Instance;
         }
 
-        public override object Convert(Func<object> proceed, Type type, bool isExplicit) {
+        public override object Convert(Func<object> proceed, dynamic self, Type type, bool isExplicit) {
             return null;
         }
 

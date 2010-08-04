@@ -31,6 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core">
+      <HintPath>..\lib\Castle Windsor 2.0\bin\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.DynamicProxy2">
+      <HintPath>..\lib\Castle Windsor 2.0\bin\Castle.DynamicProxy2.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,7 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviors\InterfaceProxyBehavior.cs" />
     <Compile Include="Behaviors\NilResultBehavior.cs" />
+    <Compile Include="IThingBehaviorProvider.cs" />
     <Compile Include="Nil.cs" />
     <Compile Include="Behaviors\NilBehavior.cs" />
     <Compile Include="Behaviors\ShapeFactoryBehavior.cs" />

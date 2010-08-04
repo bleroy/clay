@@ -2,7 +2,7 @@
 
 namespace DynShape {
     public static class Nil  {
-        static readonly object _singleton = new Thing(new NilBehavior());
-        public static object Instance { get { return _singleton; } }
+        static readonly object Singleton = new Thing(new NilBehavior(), new InterfaceProxyBehavior());
+        public static object Instance { get { return Singleton; } }
     }
 }

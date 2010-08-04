@@ -33,8 +33,8 @@ namespace DynShape {
             return Execute(proceed, (next, behavior) => () => behavior.SetIndex(next, keys, value));
         }
 
-        public object Convert(Func<object> proceed, Type type, bool isExplicit) {
-            return Execute(proceed, (next, behavior) => () => behavior.Convert(next, type, isExplicit));
+        public object Convert(Func<object> proceed, dynamic self, Type type, bool isExplicit) {
+            return Execute(proceed, (next, behavior) => () => behavior.Convert(next, self, type, isExplicit));
         }
 
         public object BinaryOperation(Func<object> proceed, ExpressionType operation, object value) {

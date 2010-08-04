@@ -19,11 +19,18 @@ namespace DynShape {
             return Expression.Convert(Expression, LimitType);
         }
 
+        private Expression GetThingBehavior() {
+            return Expression.Property(
+                Expression.Convert(Expression, typeof(IThingBehaviorProvider)),
+                "Behavior");
+        }
+
 
         public override DynamicMetaObject BindGetMember(GetMemberBinder binder) {
+            Trace.WriteLine("BindGetMember");
 
             var call = Expression.Call(
-                Expression.Property(GetLimitedSelf(), typeof(Thing).GetProperty("Behaviors")),
+                GetThingBehavior(),
                 typeof(IThingBehavior).GetMethod("GetMember"),
                 Expression.Constant(null, typeof(Func<object>)),
                 Expression.Constant(binder.Name));
@@ -32,10 +39,11 @@ namespace DynShape {
         }
 
         public override DynamicMetaObject BindSetMember(SetMemberBinder binder, DynamicMetaObject value) {
+            Trace.WriteLine("BindSetMember");
 
             var call = Expression.Call(
-                Expression.Property(GetLimitedSelf(), typeof(Thing).GetProperty("Behaviors")),
-                typeof(IThingBehavior).GetMethod("SetMember"),                
+                GetThingBehavior(),
+                typeof(IThingBehavior).GetMethod("SetMember"),
                 Expression.Constant(null, typeof(Func<object>)),
                 Expression.Constant(binder.Name),
                 Expression.Convert(value.Expression, typeof(object)));
@@ -49,7 +57,7 @@ namespace DynShape {
             var a2 = Expression.NewArrayInit(typeof(object), args.Select(x => Expression.Convert(x.Expression, typeof(Object))));
 
             var call = Expression.Call(
-                Expression.Property(GetLimitedSelf(), typeof(Thing).GetProperty("Behaviors")),
+                GetThingBehavior(),
                 typeof(IThingBehavior).GetMethod("InvokeMember"),
                 Expression.Constant(null, typeof(Func<object>)),
                 GetLimitedSelf(),
@@ -65,9 +73,10 @@ namespace DynShape {
             Trace.WriteLine("BindConvert");
 
             var call = Expression.Call(
-                Expression.Property(GetLimitedSelf(), typeof(Thing).GetProperty("Behaviors")),
+                GetThingBehavior(),
                 typeof(IThingBehavior).GetMethod("Convert"),
-                Expression.Constant(null, typeof(Func<object>)),                
+                Expression.Constant(null, typeof(Func<object>)),
+                Expression,
                 Expression.Constant(binder.Type),
                 Expression.Constant(binder.Explicit));
 
@@ -88,7 +97,7 @@ namespace DynShape {
             var a2 = Expression.NewArrayInit(typeof(object), indexes.Select(x => Expression.Convert(x.Expression, typeof(Object))));
 
             var call = Expression.Call(
-                Expression.Property(GetLimitedSelf(), typeof(Thing).GetProperty("Behaviors")),
+                GetThingBehavior(),
                 typeof(IThingBehavior).GetMethod("GetIndex"),
                 Expression.Constant(null, typeof(Func<object>)),
                 a2);
@@ -102,7 +111,7 @@ namespace DynShape {
             var a2 = Expression.NewArrayInit(typeof(object), indexes.Select(x => Expression.Convert(x.Expression, typeof(Object))));
 
             var call = Expression.Call(
-                Expression.Property(GetLimitedSelf(), typeof(Thing).GetProperty("Behaviors")),
+                GetThingBehavior(),
                 typeof(IThingBehavior).GetMethod("SetIndex"),
                 Expression.Constant(null, typeof(Func<object>)),
                 a2,
@@ -135,9 +144,9 @@ namespace DynShape {
             Trace.WriteLine("BindBinaryOperation");
 
             var call = Expression.Call(
-                Expression.Property(GetLimitedSelf(), typeof(Thing).GetProperty("Behaviors")),
+                GetThingBehavior(),
                 typeof(IThingBehavior).GetMethod("BinaryOperation"),
-                Expression.Constant(null, typeof(Func<object>)),                
+                Expression.Constant(null, typeof(Func<object>)),
                 Expression.Constant(binder.Operation),
                 Expression.Convert(arg.Expression, typeof(object)));
 

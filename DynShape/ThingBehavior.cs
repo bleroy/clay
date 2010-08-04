@@ -24,7 +24,7 @@ namespace DynShape {
             return proceed();
         }
 
-        public virtual object Convert(Func<object> proceed, Type type, bool isExplicit) {
+        public virtual object Convert(Func<object> proceed, dynamic self, Type type, bool isExplicit) {
             return proceed();
         }
 
