@@ -6,7 +6,7 @@ using System.Reflection;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
 
-namespace DynShape.Behaviors {
+namespace ClaySharp.Behaviors {
     public class InterfaceProxyBehavior : ThingBehavior {
         private static readonly IProxyBuilder ProxyBuilder = new DefaultProxyBuilder();
         static readonly MethodInfo DynamicMetaObjectProviderGetMetaObject = typeof(IDynamicMetaObjectProvider).GetMethod("GetMetaObject");

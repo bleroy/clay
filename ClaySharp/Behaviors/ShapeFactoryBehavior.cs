@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DynShape.Behaviors {
+namespace ClaySharp.Behaviors {
     public class ShapeFactoryBehavior : ThingBehavior {
         public override object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args) {
 

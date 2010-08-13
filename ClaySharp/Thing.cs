@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.CSharp.RuntimeBinder;
 
-namespace DynShape {
+namespace ClaySharp {
 
     public class Thing : IDynamicMetaObjectProvider, IThingBehaviorProvider {
         private readonly ThingBehaviorCollection _behavior;

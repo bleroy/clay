@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace DynShape {
+namespace ClaySharp {
     public class ThingBehaviorCollection : List<IThingBehavior>, IThingBehavior {
         public ThingBehaviorCollection(IEnumerable<IThingBehavior> behaviors)
             : base(behaviors) {

@@ -5,7 +5,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace DynShape {
+namespace ClaySharp {
     public class ThingMetaObject : DynamicMetaObject {
 
         public ThingMetaObject(Thing value, Expression expression)

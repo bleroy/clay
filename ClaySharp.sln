@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynShape", "DynShape\DynShape.csproj", "{76BCD43B-7BA5-4B63-B1E1-861641CA2686}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClaySharp", "ClaySharp\ClaySharp.csproj", "{76BCD43B-7BA5-4B63-B1E1-861641CA2686}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynShape.Tests", "DynShape.Tests\DynShape.Tests.csproj", "{10369238-A590-48BF-8D3E-E83EB6F0C931}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClaySharp.Tests", "ClaySharp.Tests\ClaySharp.Tests.csproj", "{10369238-A590-48BF-8D3E-E83EB6F0C931}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

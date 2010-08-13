@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace DynShape.Behaviors {
+namespace ClaySharp.Behaviors {
     public class NilBehavior : ThingBehavior {
 
         public override object GetMember(Func<object> proceed, string name) {

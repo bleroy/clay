@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace DynShape {
+namespace ClaySharp {
     public interface IThingBehavior {
         object GetMember(Func<object> proceed, string name);
         object SetMember(Func<object> proceed, string name, object value);

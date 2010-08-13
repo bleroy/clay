@@ -8,8 +8,8 @@
     <ProjectGuid>{76BCD43B-7BA5-4B63-B1E1-861641CA2686}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DynShape</RootNamespace>
-    <AssemblyName>DynShape</AssemblyName>
+    <RootNamespace>ClaySharp</RootNamespace>
+    <AssemblyName>ClaySharp</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

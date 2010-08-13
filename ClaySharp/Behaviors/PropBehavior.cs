@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DynShape.Behaviors {
+namespace ClaySharp.Behaviors {
     public class PropBehavior : ThingBehavior {
         readonly Dictionary<object, object> _props = new Dictionary<object, object>();
 

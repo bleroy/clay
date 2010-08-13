@@ -8,8 +8,8 @@
     <ProjectGuid>{10369238-A590-48BF-8D3E-E83EB6F0C931}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DynShape.Tests</RootNamespace>
-    <AssemblyName>DynShape.Tests</AssemblyName>
+    <RootNamespace>ClaySharp.Tests</RootNamespace>
+    <AssemblyName>ClaySharp.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -47,9 +47,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DynShape\DynShape.csproj">
+    <ProjectReference Include="..\ClaySharp\ClaySharp.csproj">
       <Project>{76BCD43B-7BA5-4B63-B1E1-861641CA2686}</Project>
-      <Name>DynShape</Name>
+      <Name>ClaySharp</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

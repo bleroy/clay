@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace DynShape {
+namespace ClaySharp {
     public abstract class ThingBehavior : IThingBehavior {
         public virtual object GetMember(Func<object> proceed, string name) {
             return proceed();
