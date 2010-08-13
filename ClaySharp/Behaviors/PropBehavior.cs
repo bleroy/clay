@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace ClaySharp.Behaviors {
-    public class PropBehavior : ThingBehavior {
+    public class PropBehavior : ClayBehavior {
         readonly Dictionary<object, object> _props = new Dictionary<object, object>();
 
 

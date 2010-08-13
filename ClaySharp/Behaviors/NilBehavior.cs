@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 
 namespace ClaySharp.Behaviors {
-    public class NilBehavior : ThingBehavior {
+    public class NilBehavior : ClayBehavior {
 
         public override object GetMember(Func<object> proceed, string name) {
             return Nil.Instance;

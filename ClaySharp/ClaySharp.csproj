@@ -48,17 +48,17 @@
   <ItemGroup>
     <Compile Include="Behaviors\InterfaceProxyBehavior.cs" />
     <Compile Include="Behaviors\NilResultBehavior.cs" />
-    <Compile Include="IThingBehaviorProvider.cs" />
+    <Compile Include="IClayBehaviorProvider.cs" />
     <Compile Include="Nil.cs" />
     <Compile Include="Behaviors\NilBehavior.cs" />
-    <Compile Include="Behaviors\ShapeFactoryBehavior.cs" />
-    <Compile Include="IThingBehavior.cs" />
+    <Compile Include="Behaviors\ClayFactoryBehavior.cs" />
+    <Compile Include="IClayBehavior.cs" />
     <Compile Include="Behaviors\PropBehavior.cs" />
-    <Compile Include="Thing.cs" />
+    <Compile Include="Clay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ThingBehavior.cs" />
-    <Compile Include="ThingBehaviorCollection.cs" />
-    <Compile Include="ThingMetaObject.cs" />
+    <Compile Include="ClayBehavior.cs" />
+    <Compile Include="ClayBehaviorCollection.cs" />
+    <Compile Include="ClayMetaObject.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

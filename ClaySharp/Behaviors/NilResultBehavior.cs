@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace ClaySharp.Behaviors {
-    public class NilResultBehavior : ThingBehavior {
+    public class NilResultBehavior : ClayBehavior {
 
         public override object GetMember(Func<object> proceed, string name) {
             return proceed() ?? Nil.Instance;

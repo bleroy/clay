@@ -4,12 +4,12 @@ using System.Linq;
 using System.Linq.Expressions;
 
 namespace ClaySharp {
-    public class ThingBehaviorCollection : List<IThingBehavior>, IThingBehavior {
-        public ThingBehaviorCollection(IEnumerable<IThingBehavior> behaviors)
+    public class ClayBehaviorCollection : List<IClayBehavior>, IClayBehavior {
+        public ClayBehaviorCollection(IEnumerable<IClayBehavior> behaviors)
             : base(behaviors) {
         }
 
-        object Execute(Func<object> proceed, Func<Func<object>, IThingBehavior, Func<object>> linker) {
+        object Execute(Func<object> proceed, Func<Func<object>, IClayBehavior, Func<object>> linker) {
             return this.Aggregate(proceed, linker)();
         }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace ClaySharp {
-    public abstract class ThingBehavior : IThingBehavior {
+    public abstract class ClayBehavior : IClayBehavior {
         public virtual object GetMember(Func<object> proceed, string name) {
             return proceed();
         }

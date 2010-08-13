@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace ClaySharp {
-    public interface IThingBehavior {
+    public interface IClayBehavior {
         object GetMember(Func<object> proceed, string name);
         object SetMember(Func<object> proceed, string name, object value);
         object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args);

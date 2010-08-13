@@ -7,24 +7,23 @@ namespace ClaySharp.Tests {
 
 
     [TestFixture]
-    public class ShapeTests {
-        public ShapeHelper S { get; set; }
-        public dynamic F { get; set; }
+    public class ClayTests {
+        public ClayHelper S { get; set; }
+        public dynamic New { get; set; }
 
         [SetUp]
         public void Init() {
-            S = new ShapeHelper();
-            F = new Thing(new ShapeFactoryBehavior());
+            S = new ClayHelper();
+            New = new Clay(new ClayFactoryBehavior());
         }
 
-        IEnumerable<T> Cat<T>(T t) {
+        static IEnumerable<T> Cat<T>(T t) {
             yield return t;
         }
 
         [Test]
         public void PropertiesCanBeAssignedAndRetrieved() {
-            dynamic shape = new Thing(Cat(new PropBehavior()));
-            var foo = "bar";
+            dynamic shape = new Clay(Cat(new PropBehavior()));
             shape.Foo = "textbox";
             Assert.That((object)shape.Foo, Is.EqualTo("textbox"));
         }
@@ -41,8 +40,8 @@ namespace ClaySharp.Tests {
 
         [Test]
         public void TypeCastToInterface() {
-            dynamic shape = new Thing(new PropBehavior(), new NilResultBehavior(), new InterfaceProxyBehavior());
-            dynamic shape2 = new Thing(new PropBehavior(), new NilResultBehavior(), new InterfaceProxyBehavior());
+            dynamic shape = new Clay(new PropBehavior(), new NilResultBehavior(), new InterfaceProxyBehavior());
+            dynamic shape2 = new Clay(new PropBehavior(), new NilResultBehavior(), new InterfaceProxyBehavior());
 
             var test0 = shape is ITest;
             var test1 = shape as ITest;
@@ -68,8 +67,6 @@ namespace ClaySharp.Tests {
             Assert.That(shape.Bar.FooSub, Is.SameAs(Nil.Instance));
 
             test2.Bar = shape2;
-            dynamic dynbar = test2.Bar;
-            string foosub = dynbar.FooSub;
 
             Assert.That(test2.Bar, Is.Not.Null);
             Assert.That(shape.Bar, Is.Not.Null);
@@ -108,16 +105,13 @@ namespace ClaySharp.Tests {
         [Test]
         public void CreateSyntax() {
 
-            var form = F.Form(new { Misc = 4 })
-                .Actions(F.Fieldset()
-                    .Save(F.Button().Value("Save").Id("Hello"))
-                    .Cancel(F.Button().Value("Cancel")));
+            var form = New.Form(new { Misc = 4 })
+                .Actions(New.Fieldset()
+                    .Save(New.Button().Value("Save").Id("Hello"))
+                    .Cancel(New.Button().Value("Cancel")));
 
 
-
-            var foo = F.Foo(new { Value = "Save", Id = "Hello" });
-
-            var bar = F.Foo(new { Bleah = (object)null });
+            var bar = New.Foo(new { Bleah = (object)null });
 
             Assert.That(bar.Bleah(), Is.SameAs(Nil.Instance));
             Assert.That(bar.Bleah, Is.SameAs(Nil.Instance));
@@ -184,8 +178,8 @@ namespace ClaySharp.Tests {
 
         [Test]
         public void ShapeFactorySetsShapeName() {
-            var x1 = F.Something();
-            var x2 = F.SomethingElse();
+            var x1 = New.Something();
+            var x2 = New.SomethingElse();
 
             Assert.That(x1.ShapeName, Is.EqualTo("Something"));
             Assert.That(x2.ShapeName, Is.EqualTo("SomethingElse"));
@@ -193,7 +187,7 @@ namespace ClaySharp.Tests {
 
         [Test]
         public void OptionsArgumentSetsProperties() {
-            var x = F.Something(new { One = "1", Two = 2 });
+            var x = New.Something(new { One = "1", Two = 2 });
 
             Assert.That(x.ShapeName, Is.EqualTo("Something"));
             Assert.That(x.One, Is.EqualTo("1"));
@@ -201,9 +195,9 @@ namespace ClaySharp.Tests {
         }
     }
 
-    public class ShapeHelper {
+    public class ClayHelper {
         public dynamic New(string shapeName, Action<dynamic> initialize) {
-            var item = new Thing(new PropBehavior());
+            var item = new Clay(new PropBehavior());
             initialize(item);
             return item;
         }
@@ -212,9 +206,9 @@ namespace ClaySharp.Tests {
         }
     }
 
-    public static class ShapeHelperExtensions {
-        public static dynamic TextBox(this ShapeHelper shapeHelper, Action<dynamic> initialize) {
-            return shapeHelper.New("textbox", initialize);
+    public static class ClayHelperExtensions {
+        public static dynamic TextBox(this ClayHelper clayHelper, Action<dynamic> initialize) {
+            return clayHelper.New("textbox", initialize);
         }
     }
 }

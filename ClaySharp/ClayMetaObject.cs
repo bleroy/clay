@@ -6,9 +6,9 @@ using System.Linq;
 using System.Linq.Expressions;
 
 namespace ClaySharp {
-    public class ThingMetaObject : DynamicMetaObject {
+    public class ClayMetaObject : DynamicMetaObject {
 
-        public ThingMetaObject(Thing value, Expression expression)
+        public ClayMetaObject(Clay value, Expression expression)
             : base(expression, BindingRestrictions.Empty, value) {
         }
 
@@ -19,9 +19,9 @@ namespace ClaySharp {
             return Expression.Convert(Expression, LimitType);
         }
 
-        private Expression GetThingBehavior() {
+        private Expression GetClayBehavior() {
             return Expression.Property(
-                Expression.Convert(Expression, typeof(IThingBehaviorProvider)),
+                Expression.Convert(Expression, typeof(IClayBehaviorProvider)),
                 "Behavior");
         }
 
@@ -30,8 +30,8 @@ namespace ClaySharp {
             Trace.WriteLine("BindGetMember");
 
             var call = Expression.Call(
-                GetThingBehavior(),
-                typeof(IThingBehavior).GetMethod("GetMember"),
+                GetClayBehavior(),
+                typeof(IClayBehavior).GetMethod("GetMember"),
                 Expression.Constant(null, typeof(Func<object>)),
                 Expression.Constant(binder.Name));
 
@@ -42,8 +42,8 @@ namespace ClaySharp {
             Trace.WriteLine("BindSetMember");
 
             var call = Expression.Call(
-                GetThingBehavior(),
-                typeof(IThingBehavior).GetMethod("SetMember"),
+                GetClayBehavior(),
+                typeof(IClayBehavior).GetMethod("SetMember"),
                 Expression.Constant(null, typeof(Func<object>)),
                 Expression.Constant(binder.Name),
                 Expression.Convert(value.Expression, typeof(object)));
@@ -57,8 +57,8 @@ namespace ClaySharp {
             var a2 = Expression.NewArrayInit(typeof(object), args.Select(x => Expression.Convert(x.Expression, typeof(Object))));
 
             var call = Expression.Call(
-                GetThingBehavior(),
-                typeof(IThingBehavior).GetMethod("InvokeMember"),
+                GetClayBehavior(),
+                typeof(IClayBehavior).GetMethod("InvokeMember"),
                 Expression.Constant(null, typeof(Func<object>)),
                 GetLimitedSelf(),
                 Expression.Constant(binder.Name),
@@ -73,8 +73,8 @@ namespace ClaySharp {
             Trace.WriteLine("BindConvert");
 
             var call = Expression.Call(
-                GetThingBehavior(),
-                typeof(IThingBehavior).GetMethod("Convert"),
+                GetClayBehavior(),
+                typeof(IClayBehavior).GetMethod("Convert"),
                 Expression.Constant(null, typeof(Func<object>)),
                 Expression,
                 Expression.Constant(binder.Type),
@@ -97,8 +97,8 @@ namespace ClaySharp {
             var a2 = Expression.NewArrayInit(typeof(object), indexes.Select(x => Expression.Convert(x.Expression, typeof(Object))));
 
             var call = Expression.Call(
-                GetThingBehavior(),
-                typeof(IThingBehavior).GetMethod("GetIndex"),
+                GetClayBehavior(),
+                typeof(IClayBehavior).GetMethod("GetIndex"),
                 Expression.Constant(null, typeof(Func<object>)),
                 a2);
 
@@ -111,8 +111,8 @@ namespace ClaySharp {
             var a2 = Expression.NewArrayInit(typeof(object), indexes.Select(x => Expression.Convert(x.Expression, typeof(Object))));
 
             var call = Expression.Call(
-                GetThingBehavior(),
-                typeof(IThingBehavior).GetMethod("SetIndex"),
+                GetClayBehavior(),
+                typeof(IClayBehavior).GetMethod("SetIndex"),
                 Expression.Constant(null, typeof(Func<object>)),
                 a2,
                 Expression.Convert(value.Expression, typeof(object)));
@@ -144,8 +144,8 @@ namespace ClaySharp {
             Trace.WriteLine("BindBinaryOperation");
 
             var call = Expression.Call(
-                GetThingBehavior(),
-                typeof(IThingBehavior).GetMethod("BinaryOperation"),
+                GetClayBehavior(),
+                typeof(IClayBehavior).GetMethod("BinaryOperation"),
                 Expression.Constant(null, typeof(Func<object>)),
                 Expression.Constant(binder.Operation),
                 Expression.Convert(arg.Expression, typeof(object)));

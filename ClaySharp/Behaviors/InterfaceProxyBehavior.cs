@@ -7,7 +7,7 @@ using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
 
 namespace ClaySharp.Behaviors {
-    public class InterfaceProxyBehavior : ThingBehavior {
+    public class InterfaceProxyBehavior : ClayBehavior {
         private static readonly IProxyBuilder ProxyBuilder = new DefaultProxyBuilder();
         static readonly MethodInfo DynamicMetaObjectProviderGetMetaObject = typeof(IDynamicMetaObjectProvider).GetMethod("GetMetaObject");
 
@@ -46,7 +46,7 @@ namespace ClaySharp.Behaviors {
                     return;
                 }
 
-                var behavior = ((IThingBehaviorProvider)invocation.InvocationTarget).Behavior;
+                var behavior = ((IClayBehaviorProvider)invocation.InvocationTarget).Behavior;
 
                 Func<object> proceed = () => {
                     invocation.Proceed();
@@ -85,9 +85,9 @@ namespace ClaySharp.Behaviors {
 
                 if (invocation.ReturnValue != null &&
                     !invocation.Method.ReturnType.IsAssignableFrom(invocation.ReturnValue.GetType()) &&
-                    invocation.ReturnValue is IThingBehaviorProvider) {
+                    invocation.ReturnValue is IClayBehaviorProvider) {
 
-                    var returnValueBehavior = ((IThingBehaviorProvider)invocation.ReturnValue).Behavior;
+                    var returnValueBehavior = ((IClayBehaviorProvider)invocation.ReturnValue).Behavior;
                     invocation.ReturnValue = returnValueBehavior.Convert(
                         () => invocation.ReturnValue,
                         invocation.ReturnValue,

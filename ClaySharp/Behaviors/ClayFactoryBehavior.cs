@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace ClaySharp.Behaviors {
-    public class ShapeFactoryBehavior : ThingBehavior {
+    public class ClayFactoryBehavior : ClayBehavior {
         public override object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args) {
 
-            dynamic shape = new Thing(new PropBehavior(), new NilResultBehavior(), new InterfaceProxyBehavior());
+            dynamic shape = new Clay(new PropBehavior(), new NilResultBehavior(), new InterfaceProxyBehavior());
 
             shape.ShapeName = name;
 
