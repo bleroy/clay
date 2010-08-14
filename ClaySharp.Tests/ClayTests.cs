@@ -14,7 +14,7 @@ namespace ClaySharp.Tests {
         [SetUp]
         public void Init() {
             S = new ClayHelper();
-            New = new Clay(new ClayFactoryBehavior());
+            New = new ClayFactory();
         }
 
         static IEnumerable<T> Cat<T>(T t) {

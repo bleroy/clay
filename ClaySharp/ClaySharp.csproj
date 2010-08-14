@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Behaviors\InterfaceProxyBehavior.cs" />
     <Compile Include="Behaviors\NilResultBehavior.cs" />
+    <Compile Include="ClayFactory.cs" />
     <Compile Include="IClayBehaviorProvider.cs" />
     <Compile Include="Nil.cs" />
     <Compile Include="Behaviors\NilBehavior.cs" />
