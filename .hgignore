@@ -1,5 +1,5 @@
 relre:_ReSharper*
-glob:bin
 glob:obj
 glob:*.user
 glob:*.suo
+relre:src/.*/bin
