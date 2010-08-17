@@ -8,7 +8,11 @@ namespace ClaySharp.Behaviors {
     public class ClayFactoryBehavior : ClayBehavior {
         public override object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args) {
 
-            dynamic shape = new Clay(new InterfaceProxyBehavior(), new PropBehavior(), new NilResultBehavior());
+            dynamic shape = new Clay(
+                new InterfaceProxyBehavior(), 
+                new PropBehavior(), 
+                new ArrayPropAssignmentBehavior(),
+                new NilResultBehavior());
 
             shape.ShapeName = name;
 

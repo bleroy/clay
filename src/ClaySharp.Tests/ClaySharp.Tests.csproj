@@ -44,11 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\ArrayBehaviorTests.cs" />
+    <Compile Include="Behaviors\ArrayPropAssignmentBehavior.cs" />
     <Compile Include="Behaviors\ClayFactoryBehaviorTests.cs" />
     <Compile Include="ClayTests.cs" />
     <Compile Include="BinderFallbackTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Timings\PropertyGrabbingTimings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClaySharp\ClaySharp.csproj">

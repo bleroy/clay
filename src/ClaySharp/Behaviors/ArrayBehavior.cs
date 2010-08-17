@@ -29,6 +29,9 @@ namespace ClaySharp.Behaviors {
 
         public override object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args) {
             switch (name) {
+                case "AddRange":
+                    _data.AddRange(((IEnumerable)args.Single()).OfType<object>());
+                    return self;
                 case "Add":
                     _data.AddRange(args);
                     return self;
