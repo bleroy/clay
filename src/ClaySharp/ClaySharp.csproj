@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behaviors\ArrayBehavior.cs" />
     <Compile Include="Behaviors\InterfaceProxyBehavior.cs" />
     <Compile Include="Behaviors\NilResultBehavior.cs" />
     <Compile Include="ClayFactory.cs" />

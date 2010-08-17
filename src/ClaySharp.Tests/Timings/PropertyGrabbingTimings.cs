@@ -68,15 +68,16 @@ namespace ClaySharp.Tests.Timings {
                 //    target.Y = ((T)source).Y;
                 //  }
 
-                var targetParameter = Expression.Parameter(typeof(object), "target");
-                var sourceParameter = Expression.Parameter(typeof(object), "source");
+                var targetParameter = Expression.Parameter(typeof (object), "target");
+                var sourceParameter = Expression.Parameter(typeof (object), "source");
 
                 var assignments = sourceType.GetProperties().Select(
                     propertyInfo => {
                         // for each propertyInfo, e.g. X
 
                         // sourceValue is clr expression ((T)source).X
-                        var sourceValue = Expression.Property(Expression.Convert(sourceParameter, sourceType), propertyInfo);
+                        var sourceValue = Expression.Property(Expression.Convert(sourceParameter, sourceType),
+                            propertyInfo);
 
 
                         // produce dynamic call site, (target).X = (sourceValue))
@@ -85,11 +86,14 @@ namespace ClaySharp.Tests.Timings {
                                 CSharpBinderFlags.None,
                                 propertyInfo.Name,
                                 targetParameter.Type,
-                                new[] { CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null) }),
-                            typeof(void),
+                                new[] {
+                                    CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null),
+                                    CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null)
+                                }),
+                            typeof (void),
                             targetParameter,
                             sourceValue);
-                        
+
                     });
 
 
@@ -140,26 +144,30 @@ namespace ClaySharp.Tests.Timings {
                 //    target["Y"] = ((T)source).Y;
                 //  }
 
-                var targetParameter = Expression.Parameter(typeof(object), "target");
-                var sourceParameter = Expression.Parameter(typeof(object), "source");
+                var targetParameter = Expression.Parameter(typeof (object), "target");
+                var sourceParameter = Expression.Parameter(typeof (object), "source");
 
                 var assignments = sourceType.GetProperties().Select(
                     propertyInfo => {
                         // for each propertyInfo, e.g. X
 
                         // sourceValue is clr expression ((T)source).X
-                        var sourceValue = Expression.Property(Expression.Convert(sourceParameter, sourceType), propertyInfo);
+                        var sourceValue = Expression.Property(Expression.Convert(sourceParameter, sourceType),
+                            propertyInfo);
 
                         // produce dynamic call site, (target)["X"] = (sourceValue))
                         return Expression.Dynamic(
                             Binder.SetIndex(
-                                CSharpBinderFlags.None,                                
+                                CSharpBinderFlags.None,
                                 targetParameter.Type,
-                                new[] { CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null),
-                                    CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null) }),
-                            typeof(void),
+                                new[] {
+                                    CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null),
+                                    CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null),
+                                    CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null)
+                                }),
+                            typeof (void),
                             targetParameter,
-                            Expression.Constant(propertyInfo.Name, typeof(string)),
+                            Expression.Constant(propertyInfo.Name, typeof (string)),
                             sourceValue);
                     });
 

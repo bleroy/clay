@@ -28,27 +28,31 @@ namespace ClaySharp {
 
         public override DynamicMetaObject BindGetMember(GetMemberBinder binder) {
             Trace.WriteLine("BindGetMember");
+            
+            var binderFallback = binder.FallbackGetMember(this);
 
             var call = Expression.Call(
                 GetClayBehavior(),
                 typeof(IClayBehavior).GetMethod("GetMember"),
-                Expression.Constant(null, typeof(Func<object>)),
+                Expression.Lambda(binderFallback.Expression),
                 Expression.Constant(binder.Name));
 
-            return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType));
+            return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderFallback.Restrictions));
         }
 
         public override DynamicMetaObject BindSetMember(SetMemberBinder binder, DynamicMetaObject value) {
             Trace.WriteLine("BindSetMember");
 
+            var binderFallback = binder.FallbackSetMember(this, value);
+
             var call = Expression.Call(
                 GetClayBehavior(),
                 typeof(IClayBehavior).GetMethod("SetMember"),
-                Expression.Constant(null, typeof(Func<object>)),
+                Expression.Lambda(binderFallback.Expression),
                 Expression.Constant(binder.Name),
                 Expression.Convert(value.Expression, typeof(object)));
 
-            return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType));
+            return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderFallback.Restrictions));
         }
 
         public override DynamicMetaObject BindInvokeMember(InvokeMemberBinder binder, DynamicMetaObject[] args) {
@@ -56,15 +60,17 @@ namespace ClaySharp {
 
             var a2 = Expression.NewArrayInit(typeof(object), args.Select(x => Expression.Convert(x.Expression, typeof(Object))));
 
+            var binderFallback = binder.FallbackInvokeMember(this, args);
+
             var call = Expression.Call(
                 GetClayBehavior(),
                 typeof(IClayBehavior).GetMethod("InvokeMember"),
-                Expression.Constant(null, typeof(Func<object>)),
+                Expression.Lambda(binderFallback.Expression),
                 GetLimitedSelf(),
                 Expression.Constant(binder.Name),
                 a2);
 
-            return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType));
+            return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderFallback.Restrictions));
 
         }
 
@@ -96,13 +102,15 @@ namespace ClaySharp {
 
             var a2 = Expression.NewArrayInit(typeof(object), indexes.Select(x => Expression.Convert(x.Expression, typeof(Object))));
 
+            var binderFallback = binder.FallbackGetIndex(this, indexes);
+
             var call = Expression.Call(
                 GetClayBehavior(),
                 typeof(IClayBehavior).GetMethod("GetIndex"),
-                Expression.Constant(null, typeof(Func<object>)),
+                Expression.Lambda(binderFallback.Expression),
                 a2);
 
-            return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType));
+            return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderFallback.Restrictions));
         }
 
         public override DynamicMetaObject BindSetIndex(SetIndexBinder binder, DynamicMetaObject[] indexes, DynamicMetaObject value) {
@@ -110,14 +118,16 @@ namespace ClaySharp {
 
             var a2 = Expression.NewArrayInit(typeof(object), indexes.Select(x => Expression.Convert(x.Expression, typeof(Object))));
 
+            var binderFallback = binder.FallbackSetIndex(this, indexes, value);
+
             var call = Expression.Call(
                 GetClayBehavior(),
                 typeof(IClayBehavior).GetMethod("SetIndex"),
-                Expression.Constant(null, typeof(Func<object>)),
+                Expression.Lambda(binderFallback.Expression),
                 a2,
                 Expression.Convert(value.Expression, typeof(object)));
 
-            return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType));
+            return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderFallback.Restrictions));
         }
 
         public override DynamicMetaObject BindDeleteIndex(DeleteIndexBinder binder, DynamicMetaObject[] indexes) {

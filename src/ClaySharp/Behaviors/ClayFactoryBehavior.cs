@@ -8,7 +8,7 @@ namespace ClaySharp.Behaviors {
     public class ClayFactoryBehavior : ClayBehavior {
         public override object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args) {
 
-            dynamic shape = new Clay(new PropBehavior(), new NilResultBehavior(), new InterfaceProxyBehavior());
+            dynamic shape = new Clay(new InterfaceProxyBehavior(), new PropBehavior(), new NilResultBehavior());
 
             shape.ShapeName = name;
 
@@ -37,8 +37,8 @@ namespace ClaySharp.Behaviors {
                 //    target.Y = ((T)source).Y;
                 //  }
 
-                var targetParameter = Expression.Parameter(typeof(object), "target");
-                var sourceParameter = Expression.Parameter(typeof(object), "source");
+                var targetParameter = Expression.Parameter(typeof (object), "target");
+                var sourceParameter = Expression.Parameter(typeof (object), "source");
 
                 // for each propertyInfo, e.g. X
                 // produce dynamic call site, (target).X = ((T)source).X
@@ -47,9 +47,12 @@ namespace ClaySharp.Behaviors {
                         Binder.SetMember(
                             CSharpBinderFlags.None,
                             property.Name,
-                            typeof(void),
-                            new[] { CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null) }),
-                        typeof(void),
+                            typeof (void),
+                            new[] {
+                                CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null),
+                                CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null)
+                            }),
+                        typeof (void),
                         targetParameter,
                         Expression.Property(
                             Expression.Convert(sourceParameter, sourceType),
