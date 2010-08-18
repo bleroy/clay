@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ClaySharp.Behaviors {
     public class ArrayPropAssignmentBehavior : ClayBehavior {
 
-        public override object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args) {
+        public override object InvokeMember(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
             return
-                IfSingleArray(args, arr => { self[name] = arr; return self; }, () =>
-                    IfTwoOrMoreArgs(args, arr => { self[name] = arr; return self; },
+                IfSingleArray(args, arr => { ((dynamic)self)[name] = arr; return self; }, () =>
+                    IfTwoOrMoreArgs(args, arr => { ((dynamic)self)[name] = arr; return self; },
                         proceed));
         }
 

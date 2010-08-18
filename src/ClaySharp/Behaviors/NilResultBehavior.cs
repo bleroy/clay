@@ -13,7 +13,7 @@ namespace ClaySharp.Behaviors {
             return proceed() ?? Nil.Instance;
         }
 
-        public override object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args) {
+        public override object InvokeMember(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
             if (args.Any())
                 return proceed();
 

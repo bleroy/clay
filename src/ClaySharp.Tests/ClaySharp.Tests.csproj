@@ -48,6 +48,8 @@
     <Compile Include="Behaviors\ClayFactoryBehaviorTests.cs" />
     <Compile Include="ClayTests.cs" />
     <Compile Include="BinderFallbackTests.cs" />
+    <Compile Include="DefaultClayActivatorTests.cs" />
+    <Compile Include="Implementation\NamedArgumentsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

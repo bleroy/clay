@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
+using ClaySharp.Implementation;
 
 namespace ClaySharp {
     public class ClayMetaObject : DynamicMetaObject {
@@ -57,8 +58,12 @@ namespace ClaySharp {
 
         public override DynamicMetaObject BindInvokeMember(InvokeMemberBinder binder, DynamicMetaObject[] args) {
             Trace.WriteLine("BindInvokeMember");
+            
 
-            var a2 = Expression.NewArrayInit(typeof(object), args.Select(x => Expression.Convert(x.Expression, typeof(Object))));
+
+            var argValues = Expression.NewArrayInit(typeof(object), args.Select(x => Expression.Convert(x.Expression, typeof(Object))));
+            var argNames = Expression.Constant(binder.CallInfo.ArgumentNames, typeof(IEnumerable<string>));
+            var argNamedEnumerable = Expression.Call(typeof(Arguments).GetMethod("From"), argValues, argNames);
 
             var binderFallback = binder.FallbackInvokeMember(this, args);
 
@@ -68,7 +73,7 @@ namespace ClaySharp {
                 Expression.Lambda(binderFallback.Expression),
                 GetLimitedSelf(),
                 Expression.Constant(binder.Name),
-                a2);
+                argNamedEnumerable);
 
             return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderFallback.Restrictions));
 
@@ -78,17 +83,21 @@ namespace ClaySharp {
         public override DynamicMetaObject BindConvert(ConvertBinder binder) {
             Trace.WriteLine("BindConvert");
 
+            var binderFallback = binder.FallbackConvert(this);
+
+            //TODO: all proceed Lambda expressions will likely need an object typecast... utility method...
+
             var call = Expression.Call(
                 GetClayBehavior(),
                 typeof(IClayBehavior).GetMethod("Convert"),
-                Expression.Constant(null, typeof(Func<object>)),
+                Expression.Lambda(Expression.Convert(binderFallback.Expression, typeof(Object))),
                 Expression,
                 Expression.Constant(binder.Type),
                 Expression.Constant(binder.Explicit));
 
             var convert = Expression.Convert(call, binder.Type);
 
-            return new DynamicMetaObject(convert, BindingRestrictions.GetTypeRestriction(Expression, LimitType));
+            return new DynamicMetaObject(convert, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderFallback.Restrictions));
         }
 
 

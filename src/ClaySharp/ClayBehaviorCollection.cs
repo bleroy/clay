@@ -21,7 +21,7 @@ namespace ClaySharp {
             return Execute(proceed, (next, behavior) => () => behavior.SetMember(next, name, value));
         }
 
-        public object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args) {
+        public object InvokeMember(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
             return Execute(proceed, (next, behavior) => () => behavior.InvokeMember(next, self, name, args));
         }
 
@@ -33,7 +33,7 @@ namespace ClaySharp {
             return Execute(proceed, (next, behavior) => () => behavior.SetIndex(next, keys, value));
         }
 
-        public object Convert(Func<object> proceed, dynamic self, Type type, bool isExplicit) {
+        public object Convert(Func<object> proceed, object self, Type type, bool isExplicit) {
             return Execute(proceed, (next, behavior) => () => behavior.Convert(next, self, type, isExplicit));
         }
 

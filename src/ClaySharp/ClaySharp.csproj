@@ -50,8 +50,12 @@
     <Compile Include="Behaviors\ArrayPropAssignmentBehavior.cs" />
     <Compile Include="Behaviors\InterfaceProxyBehavior.cs" />
     <Compile Include="Behaviors\NilResultBehavior.cs" />
+    <Compile Include="ClayActivator.cs" />
     <Compile Include="ClayFactory.cs" />
+    <Compile Include="DefaultClayActivator.cs" />
+    <Compile Include="IClayActivator.cs" />
     <Compile Include="IClayBehaviorProvider.cs" />
+    <Compile Include="Implementation\Arguments.cs" />
     <Compile Include="Nil.cs" />
     <Compile Include="Behaviors\NilBehavior.cs" />
     <Compile Include="Behaviors\ClayFactoryBehavior.cs" />

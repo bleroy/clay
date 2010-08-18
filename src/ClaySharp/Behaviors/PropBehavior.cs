@@ -16,7 +16,7 @@ namespace ClaySharp.Behaviors {
             return _props[name] = value;
         }
 
-        public override object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args) {
+        public override object InvokeMember(Func<object> proceed, dynamic self, string name, INamedEnumerable<object> args) {
             if (!args.Any()) {
                 return GetMember(proceed, name);
             }

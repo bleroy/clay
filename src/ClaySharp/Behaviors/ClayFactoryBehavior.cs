@@ -6,7 +6,7 @@ using Microsoft.CSharp.RuntimeBinder;
 
 namespace ClaySharp.Behaviors {
     public class ClayFactoryBehavior : ClayBehavior {
-        public override object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args) {
+        public override object InvokeMember(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
 
             dynamic shape = new Clay(
                 new InterfaceProxyBehavior(), 

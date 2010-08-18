@@ -14,14 +14,14 @@ namespace ClaySharp.Behaviors {
             return Nil.Instance;
         }
 
-        public override object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args) {
+        public override object InvokeMember(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
             if (args.Any())
                 return proceed();
 
             return Nil.Instance;
         }
 
-        public override object Convert(Func<object> proceed, dynamic self, Type type, bool isExplicit) {
+        public override object Convert(Func<object> proceed, object self, Type type, bool isExplicit) {
             return null;
         }
 

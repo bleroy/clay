@@ -27,7 +27,7 @@ namespace ClaySharp.Behaviors {
         }
 
 
-        public override object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args) {
+        public override object InvokeMember(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
             switch (name) {
                 case "AddRange":
                     _data.AddRange(((IEnumerable)args.Single()).OfType<object>());
@@ -104,7 +104,7 @@ namespace ClaySharp.Behaviors {
                 _enumerator = enumerator;
             }
 
-            public override object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args) {
+            public override object InvokeMember(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
                 switch (name) {
                     case "MoveNext":
                         return _enumerator.MoveNext();

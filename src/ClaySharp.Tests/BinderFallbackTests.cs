@@ -10,7 +10,7 @@ namespace ClaySharp.Tests {
     public class BinderFallbackTests {
 
         class TestMemberBehavior : ClayBehavior {
-            public override object InvokeMember(Func<object> proceed, dynamic self, string name, IEnumerable<object> args) {
+            public override object InvokeMember(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
                 return name == "Sample" ? "Data" : proceed();
             }
             public override object GetMember(Func<object> proceed, string name) {

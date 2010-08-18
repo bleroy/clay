@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using ClaySharp.Behaviors;
 using NUnit.Framework;
 
@@ -8,12 +10,10 @@ namespace ClaySharp.Tests {
 
     [TestFixture]
     public class ClayTests {
-        public ClayHelper S { get; set; }
         public dynamic New { get; set; }
 
         [SetUp]
         public void Init() {
-            S = new ClayHelper();
             New = new ClayFactory();
         }
 
@@ -193,22 +193,9 @@ namespace ClaySharp.Tests {
             Assert.That(x.One, Is.EqualTo("1"));
             Assert.That(x.Two, Is.EqualTo(2));
         }
+
     }
 
-    public class ClayHelper {
-        public dynamic New(string shapeName, Action<dynamic> initialize) {
-            var item = new Clay(new PropBehavior());
-            initialize(item);
-            return item;
-        }
-        public dynamic New(string shapeName) {
-            return New(shapeName, item => { });
-        }
-    }
 
-    public static class ClayHelperExtensions {
-        public static dynamic TextBox(this ClayHelper clayHelper, Action<dynamic> initialize) {
-            return clayHelper.New("textbox", initialize);
-        }
-    }
+
 }

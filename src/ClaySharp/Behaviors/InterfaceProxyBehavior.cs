@@ -5,13 +5,14 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
+using ClaySharp.Implementation;
 
 namespace ClaySharp.Behaviors {
     public class InterfaceProxyBehavior : ClayBehavior {
         private static readonly IProxyBuilder ProxyBuilder = new DefaultProxyBuilder();
         static readonly MethodInfo DynamicMetaObjectProviderGetMetaObject = typeof(IDynamicMetaObjectProvider).GetMethod("GetMetaObject");
 
-        public override object Convert(Func<object> proceed, dynamic self, Type type, bool isExplicit) {
+        public override object Convert(Func<object> proceed, object self, Type type, bool isExplicit) {
             if (type.IsInterface && type != typeof(IDynamicMetaObjectProvider)) {
                 var proxyType = ProxyBuilder.CreateInterfaceProxyTypeWithoutTarget(
                     type,
@@ -80,7 +81,7 @@ namespace ClaySharp.Behaviors {
                         proceed,
                         invocation.InvocationTarget,
                         invocation.Method.Name,
-                        invocation.Arguments);
+                        Arguments.From(invocation.Arguments, invocation.Method.GetParameters().Select(parameter => parameter.Name)));
                 }
 
                 if (invocation.ReturnValue != null &&
