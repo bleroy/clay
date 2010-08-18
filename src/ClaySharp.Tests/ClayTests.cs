@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using ClaySharp.Behaviors;
 using NUnit.Framework;
 
@@ -10,10 +8,12 @@ namespace ClaySharp.Tests {
 
     [TestFixture]
     public class ClayTests {
+        public ClayHelper S { get; set; }
         public dynamic New { get; set; }
 
         [SetUp]
         public void Init() {
+            S = new ClayHelper();
             New = new ClayFactory();
         }
 
@@ -177,6 +177,88 @@ namespace ClaySharp.Tests {
         }
 
         [Test]
+        public void CreateArraySyntax() {
+            var directory = New.Array(
+                New.Person().Name("Louis").Aliases(new [] {"Lou"}),
+                New.Person().Name("Bertrand").Aliases("bleroy", "boudin")
+                ).Name("Orchard folks");
+
+            Assert.That(directory.Count, Is.EqualTo(2));
+            Assert.That(directory.Name, Is.EqualTo("Orchard folks"));
+            Assert.That(directory[0].Name, Is.EqualTo("Louis"));
+            Assert.That(directory[0].Aliases.Count, Is.EqualTo(1));
+            Assert.That(directory[0].Aliases[0], Is.EqualTo("Lou"));
+            Assert.That(directory[1].Name, Is.EqualTo("Bertrand"));
+            Assert.That(directory[1].Aliases.Count, Is.EqualTo(2));
+            Assert.That(directory[1].Aliases[0], Is.EqualTo("bleroy"));
+            Assert.That(directory[1].Aliases[1], Is.EqualTo("boudin"));
+        }
+
+        public interface IPerson {
+            string FirstName { get; set; }
+            string LastName { get; set; }
+        }
+
+        [Test]
+        public void BertrandsAssumptions() {
+            var pentagon = New.Shape();
+            pentagon["FavoriteNumber"] = 5;
+
+            Assert.That(pentagon.FavoriteNumber, Is.EqualTo(5));
+            Assert.That(pentagon.SomethingNeverSet, Is.SameAs(Nil.Instance));
+
+            var person = New.Person()
+                .FirstName("Louis")
+                .LastName("Dejardin");
+            Assert.That(person.FirstName, Is.EqualTo("Louis"));
+            Assert.That(person["FirstName"], Is.EqualTo("Louis"));
+            Assert.That(person.FirstName(), Is.EqualTo("Louis"));
+            Assert.That(person.LastName, Is.EqualTo("Dejardin"));
+
+            var otherPerson = New.Person(new {
+                FirstName = "Bertrand",
+                LastName = "Le Roy"
+                });
+            Assert.That(otherPerson.FirstName, Is.EqualTo("Bertrand"));
+            Assert.That(otherPerson.LastName, Is.EqualTo("Le Roy"));
+
+            var yetAnotherPerson = New.Person(
+                FirstName: "Renaud",
+                LastName: "Paquay"
+                );
+            Assert.That(yetAnotherPerson.FirstName, Is.EqualTo("Renaud"));
+            Assert.That(yetAnotherPerson.LastName, Is.EqualTo("Paquay"));
+
+            var people = New.Array(
+                New.Person().FirstName("Louis").LastName("Dejardin"),
+                New.Person().FirstName("Bertrand").LastName("Le Roy")
+                );
+            Assert.That(people.Count, Is.EqualTo(2));
+            Assert.That(people[0].FirstName, Is.EqualTo("Louis"));
+            Assert.That(people[1].FirstName, Is.EqualTo("Bertrand"));
+            Assert.That(people[0].LastName, Is.EqualTo("Dejardin"));
+            Assert.That(people[1].LastName, Is.EqualTo("Le Roy"));
+
+            var a = "";
+            foreach(var p in people) {
+                a += p.FirstName + "|";
+            }
+            Assert.That(a, Is.EqualTo("Louis|Bertrand|"));
+
+            otherPerson.Aliases("bleroy", "BoudinFatal");
+            Assert.That(otherPerson.Aliases.Count, Is.EqualTo(2));
+
+            person.Aliases(new[] {"Lou"});
+            Assert.That(person.Aliases.Count, Is.EqualTo(1));
+            person.Aliases.Add("loudej");
+            Assert.That(person.Aliases.Count, Is.EqualTo(2));
+
+            IPerson lou = people[0];
+            var fullName = lou.FirstName + " " + lou.LastName;
+            Assert.That(fullName, Is.EqualTo("Louis Dejardin"));
+        }
+
+        [Test]
         public void ShapeFactorySetsShapeName() {
             var x1 = New.Something();
             var x2 = New.SomethingElse();
@@ -193,9 +275,24 @@ namespace ClaySharp.Tests {
             Assert.That(x.One, Is.EqualTo("1"));
             Assert.That(x.Two, Is.EqualTo(2));
         }
+    }
 
+    public class ClayHelper {
+        public dynamic New(string shapeName, Action<dynamic> initialize) {
+            var item = new Clay(new PropBehavior());
+            initialize(item);
+            return item;
+        }
+        public dynamic New(string shapeName) {
+            return New(shapeName, item => { });
+        }
     }
 
 
 
+    public static class ClayHelperExtensions {
+        public static dynamic TextBox(this ClayHelper clayHelper, Action<dynamic> initialize) {
+            return clayHelper.New("textbox", initialize);
+        }
+    }
 }

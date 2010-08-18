@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviors\ArrayBehavior.cs" />
+    <Compile Include="Behaviors\ArrayFactoryBehavior.cs" />
     <Compile Include="Behaviors\ArrayPropAssignmentBehavior.cs" />
     <Compile Include="Behaviors\InterfaceProxyBehavior.cs" />
     <Compile Include="Behaviors\NilResultBehavior.cs" />
