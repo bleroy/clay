@@ -82,7 +82,7 @@ namespace ClaySharp.Tests {
 
 
         public interface ITestForm {
-            string ShapeName { get; set; }
+            string ShapeName();
             object this[object key] { get; set; }
 
             ITestActions Actions { get; set; }
@@ -174,6 +174,11 @@ namespace ClaySharp.Tests {
             Assert.That(f.Misc, Is.EqualTo(4));
             Assert.That(f["Misc"], Is.EqualTo(4));
             Assert.That(form.Misc, Is.EqualTo(4));
+
+            f.Misc = 9;
+            Assert.That(f.Misc, Is.EqualTo(9));
+            Assert.That(f["Misc"], Is.EqualTo(9));
+            Assert.That(form.Misc, Is.EqualTo(9));
         }
 
         [Test]

@@ -51,6 +51,7 @@ namespace ClaySharp.Tests {
 
         [Test]
         public void SubclassMembersRemainAvailableStaticallyAndDynamicallyAndViaInterface() {
+
             var alpha = ClayActivator.CreateInstance<ClayPlus>(new[] { new InterfaceProxyBehavior() });
 
             dynamic dynamically = alpha;
