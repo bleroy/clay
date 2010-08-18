@@ -41,5 +41,16 @@ namespace ClaySharp.Tests.Behaviors {
             Assert.That(alpha.One, Is.EqualTo(1));
             Assert.That(alpha.Two, Is.EqualTo("dos"));
         }
+
+        [Test]
+        public void FactoryMethodUsesNamedParameters() {
+            dynamic factory = new Clay(new ClayFactoryBehavior());
+
+            var alpha = factory.Alpha(new { Red = "#f00" }, One: 1, Two: "dos");
+
+            Assert.That(alpha.One, Is.EqualTo(1));
+            Assert.That(alpha.Two, Is.EqualTo("dos"));
+            Assert.That(alpha.Red, Is.EqualTo("#f00"));
+        }
     }
 }

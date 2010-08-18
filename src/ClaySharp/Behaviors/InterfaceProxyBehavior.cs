@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -6,6 +7,7 @@ using System.Reflection;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
 using ClaySharp.Implementation;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace ClaySharp.Behaviors {
     public class InterfaceProxyBehavior : ClayBehavior {
@@ -49,6 +51,9 @@ namespace ClaySharp.Behaviors {
 
                 var behavior = ((IClayBehaviorProvider)invocation.InvocationTarget).Behavior;
 
+                //var invoker = BindInvoker(invocation);
+                //invoker(invocation);
+
                 Func<object> proceed = () => {
                     invocation.Proceed();
                     return invocation.ReturnValue;
@@ -77,11 +82,14 @@ namespace ClaySharp.Behaviors {
                         invocation.Arguments.Single());
                 }
                 else {
-                    invocation.ReturnValue = behavior.InvokeMember(
-                        proceed,
-                        invocation.InvocationTarget,
-                        invocation.Method.Name,
-                        Arguments.From(invocation.Arguments, invocation.Method.GetParameters().Select(parameter => parameter.Name)));
+                    var invoker = BindInvoker(invocation);
+                    invoker(invocation);
+
+                    //invocation.ReturnValue = behavior.InvokeMember(
+                    //    proceed,
+                    //    invocation.InvocationTarget,
+                    //    invocation.Method.Name,
+                    //    Arguments.From(invocation.Arguments, invocation.Method.GetParameters().Select(parameter => parameter.Name)));
                 }
 
                 if (invocation.ReturnValue != null &&
@@ -96,8 +104,96 @@ namespace ClaySharp.Behaviors {
                         false);
                 }
             }
+
+
+            static readonly ConcurrentDictionary<MethodInfo, Action<IInvocation>> _invokers = new ConcurrentDictionary<MethodInfo, Action<IInvocation>>();
+
+            private static Action<IInvocation> BindInvoker(IInvocation invocation) {
+                return _invokers.GetOrAdd(invocation.Method, CompileInvoker);
+            }
+
+            private static Action<IInvocation> CompileInvoker(MethodInfo method) {
+                var methodParameters = method.GetParameters();
+                var invocationParameter = Expression.Parameter(typeof(IInvocation), "invocation");
+                Expression body;
+                if (method.Name.Equals("get_Item")) {
+                    throw new NotImplementedException();
+                }
+                else if (method.Name.Equals("set_Item")) {
+                    throw new NotImplementedException();
+                }
+                else if (method.Name.StartsWith("get_")) {
+                    throw new NotImplementedException();
+                }
+                else if (method.Name.EndsWith("set_")) {
+                    throw new NotImplementedException();
+                }
+                else {
+
+                    var binder = Microsoft.CSharp.RuntimeBinder.Binder.InvokeMember(
+                        CSharpBinderFlags.None,
+                        method.Name,
+                        null,//methodParameters.Select(p => p.ParameterType),
+                        typeof(object),
+                        new[] { CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null) }.Concat(
+                        methodParameters.Select(
+                            mp => CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.NamedArgument, mp.Name))));
+
+                    body = Expression.Dynamic(binder,
+                        typeof(object),//method.ReturnType,
+                        new Expression[] { Expression.Property(invocationParameter, invocationParameter.Type, "InvocationTarget") }.Concat(
+                        methodParameters.Select(
+                            (mp, index) =>
+                                Expression.Convert(
+                                    Expression.ArrayIndex(
+                                        Expression.Property(invocationParameter, invocationParameter.Type, "Arguments"),
+                                        Expression.Constant(index)), mp.ParameterType))));
+
+                    if (method.ReturnType != typeof(void)) {
+                        body = Expression.Assign(
+                            Expression.Property(invocationParameter, invocationParameter.Type, "ReturnValue"),
+                            Expression.Convert(body, typeof(object)));
+                    }
+
+                }
+                var lambda = Expression.Lambda<Action<IInvocation>>(body, invocationParameter);
+                return lambda.Compile();
+                //if (method.Name.Equals("get_Item")) {
+                //    invocation.ReturnValue = behavior.GetIndex(
+                //        proceed,
+                //        invocation.Arguments);
+                //}
+                //else if (method.Name.Equals("set_Item")) {
+                //    invocation.ReturnValue = behavior.SetIndex(
+                //        proceed,
+                //        invocation.Arguments.Take(invocation.Arguments.Count() - 1),
+                //        invocation.Arguments.Last());
+                //}
+                //else if (!invocation.Arguments.Any() && invocation.Method.Name.StartsWith("get_")) {
+                //    invocation.ReturnValue = behavior.GetMember(
+                //        proceed,
+                //        invocation.Method.Name.Substring("get_".Length));
+                //}
+                //else if (invocation.Arguments.Count() == 1 && invocation.Method.Name.StartsWith("set_")) {
+                //    invocation.ReturnValue = behavior.SetMember(
+                //        proceed,
+                //        invocation.Method.Name.Substring("set_".Length),
+                //        invocation.Arguments.Single());
+                //}
+                //else {
+                //    invocation.ReturnValue = behavior.InvokeMember(
+                //        proceed,
+                //        invocation.InvocationTarget,
+                //        invocation.Method.Name,
+                //        Arguments.From(invocation.Arguments, invocation.Method.GetParameters().Select(parameter => parameter.Name)));
+                //}
+            }
         }
 
+        /// <summary>
+        /// Based on techniques discussed by Tomáš Matoušek
+        /// at http://blog.tomasm.net/2009/11/07/forwarding-meta-object/
+        /// </summary>
         public sealed class ForwardingMetaObject : DynamicMetaObject {
             private readonly DynamicMetaObject _metaForwardee;
 
