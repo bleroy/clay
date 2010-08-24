@@ -55,15 +55,15 @@ namespace ClaySharp.Tests {
             var alpha = ClayActivator.CreateInstance<ClayPlus>(new[] { new InterfaceProxyBehavior() });
 
             dynamic dynamically = alpha;
-            ClayPlus statically = (ClayPlus)alpha;
+            ClayPlus statically = alpha;
             IClayPlus interfacially = alpha;
 
             Assert.That(dynamically.Hello, Is.EqualTo("World"));
             Assert.That(statically.Hello, Is.EqualTo("World"));
-            //Assert.That(interfacially.Hello, Is.EqualTo("World"));
+            Assert.That(interfacially.Hello, Is.EqualTo("World"));
 
             Assert.That(dynamically.Add(3, 4), Is.EqualTo(7));
-            Assert.That(statically.Add(3, 4), Is.EqualTo(7));            
+            Assert.That(statically.Add(3, 4), Is.EqualTo(7));
             Assert.That(interfacially.Add(3, 4), Is.EqualTo(7));
             Assert.That(interfacially.Add(3, 5), Is.EqualTo(8));
             Assert.That(interfacially.Add(3, 6), Is.EqualTo(9));
@@ -90,5 +90,64 @@ namespace ClaySharp.Tests {
 
         }
 
+        [Test]
+        public void SubclassFromAnythingMembersRemainAvailableStaticallyAndDynamicallyAndViaInterface() {
+
+            var alpha = ClayActivator.CreateInstance<Anything>(new[] { new InterfaceProxyBehavior() });
+
+            dynamic dynamically = alpha;
+            Anything statically = alpha;
+            IClayPlus interfacially = alpha;
+
+            Assert.That(dynamically.Hello, Is.EqualTo("World"));
+            Assert.That(statically.Hello, Is.EqualTo("World"));
+            Assert.That(interfacially.Hello, Is.EqualTo("World"));
+
+            Assert.That(dynamically.Add(3, 4), Is.EqualTo(7));
+            Assert.That(statically.Add(3, 4), Is.EqualTo(7));
+            Assert.That(interfacially.Add(3, 4), Is.EqualTo(7));
+            Assert.That(interfacially.Add(3, 5), Is.EqualTo(8));
+            Assert.That(interfacially.Add(3, 6), Is.EqualTo(9));
+        }
+
+
+        [Test]
+        public void BehaviorsCanFilterVirtualMethods() {
+
+            var alpha = ClayActivator.CreateInstance<Anything>(new IClayBehavior[] { 
+                new InterfaceProxyBehavior(), 
+                new AnythingModifier() });
+
+            dynamic dynamically = alpha;
+            Anything statically = alpha;
+            IClayPlus interfacially = alpha;
+
+            Assert.That(dynamically.Hello, Is.EqualTo("[World]"));
+            //Assert.That(statically.Hello, Is.EqualTo("[World]"));
+            Assert.That(interfacially.Hello, Is.EqualTo("[World]"));
+
+            Assert.That(dynamically.Add(3, 4), Is.EqualTo(9));
+            //Assert.That(statically.Add(3, 4), Is.EqualTo(9));
+            Assert.That(interfacially.Add(3, 4), Is.EqualTo(9));
+            Assert.That(interfacially.Add(3, 5), Is.EqualTo(10));
+            Assert.That(interfacially.Add(3, 6), Is.EqualTo(11));
+        }
+
+        class AnythingModifier : ClayBehavior {
+            public override object InvokeMember(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
+                if (name == "Add") {
+                    return (int)proceed() + 2;
+                }
+                return proceed();
+            }
+            public override object GetMember(Func<object> proceed, string name) {
+                if (name == "Hello") {
+                    return "[" + proceed() + "]";
+                }
+
+                return proceed();
+            }
+
+        }
     }
 }

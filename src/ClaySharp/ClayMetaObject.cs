@@ -9,7 +9,7 @@ using ClaySharp.Implementation;
 namespace ClaySharp {
     public class ClayMetaObject : DynamicMetaObject {
 
-        public ClayMetaObject(Clay value, Expression expression)
+        public ClayMetaObject(object value, Expression expression)
             : base(expression, BindingRestrictions.Empty, value) {
         }
 
