@@ -3,6 +3,6 @@
 namespace ClaySharp
 {
     public interface IClayActivator {
-        dynamic CreateInstance<TBase>(IEnumerable<IClayBehavior> behaviors);
+        dynamic CreateInstance<TBase>(IEnumerable<IClayBehavior> behaviors, IEnumerable<object> arguments);
     }
 }

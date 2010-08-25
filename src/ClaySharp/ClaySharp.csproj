@@ -53,6 +53,7 @@
     <Compile Include="Behaviors\NilResultBehavior.cs" />
     <Compile Include="ClayActivator.cs" />
     <Compile Include="ClayFactory.cs" />
+    <Compile Include="ClayInteceptor.cs" />
     <Compile Include="DefaultClayActivator.cs" />
     <Compile Include="IClayActivator.cs" />
     <Compile Include="IClayBehaviorProvider.cs" />

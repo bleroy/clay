@@ -71,8 +71,15 @@ namespace ClaySharp.Tests {
 
 
         public class Anything {
+            private readonly string _helloText;
 
-            public virtual string Hello { get { return "World"; } }
+            public Anything() {
+            }
+            public Anything(string helloText) {
+                _helloText = helloText;
+            }
+
+            public virtual string Hello { get { return _helloText ?? "World"; } }
 
             public virtual int Add(int left, int right) {
                 return left + right;
@@ -92,8 +99,9 @@ namespace ClaySharp.Tests {
 
         [Test]
         public void SubclassFromAnythingMembersRemainAvailableStaticallyAndDynamicallyAndViaInterface() {
-
             var alpha = ClayActivator.CreateInstance<Anything>(new[] { new InterfaceProxyBehavior() });
+            var type = alpha.GetType();
+            Assert.That(type, Is.Not.EqualTo(typeof(Anything)));
 
             dynamic dynamically = alpha;
             Anything statically = alpha;
@@ -149,5 +157,7 @@ namespace ClaySharp.Tests {
             }
 
         }
+
+
     }
 }

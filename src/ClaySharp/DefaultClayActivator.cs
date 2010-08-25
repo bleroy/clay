@@ -9,9 +9,9 @@ using Castle.DynamicProxy;
 
 namespace ClaySharp {
     public class DefaultClayActivator : IClayActivator {
-        static IProxyBuilder _builder = new DefaultProxyBuilder();
+        static readonly IProxyBuilder _builder = new DefaultProxyBuilder();
 
-        public dynamic CreateInstance<TBase>(IEnumerable<IClayBehavior> behaviors) {
+        public dynamic CreateInstance<TBase>(IEnumerable<IClayBehavior> behaviors, IEnumerable<object> arguments) {
             var baseType = typeof(TBase);
             var isDynamicMetaObjectProvider = typeof(IDynamicMetaObjectProvider).IsAssignableFrom(baseType);
             var isClayBehaviorProvider = typeof(IClayBehaviorProvider).IsAssignableFrom(baseType);
@@ -40,7 +40,9 @@ namespace ClaySharp {
 
             var proxyType = _builder.CreateClassProxy(baseType, options);
 
-            constructorArgs.Add(new IInterceptor[0]);
+            constructorArgs.Add(new IInterceptor[]{new ClayInteceptor()});
+            if (arguments != null)
+                constructorArgs.AddRange(arguments);
 
             return contextualize(Activator.CreateInstance(proxyType, constructorArgs.ToArray()));
         }

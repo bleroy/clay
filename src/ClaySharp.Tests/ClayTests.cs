@@ -280,6 +280,7 @@ namespace ClaySharp.Tests {
             Assert.That(x.One, Is.EqualTo("1"));
             Assert.That(x.Two, Is.EqualTo(2));
         }
+
     }
 
     public class ClayHelper {

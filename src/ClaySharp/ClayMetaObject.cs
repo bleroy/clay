@@ -4,10 +4,20 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using ClaySharp.Implementation;
 
 namespace ClaySharp {
     public class ClayMetaObject : DynamicMetaObject {
+        // ReSharper disable InconsistentNaming
+        private static readonly MethodInfo IClayBehavior_InvokeMember = typeof(IClayBehavior).GetMethod("InvokeMember");
+        private static readonly MethodInfo IClayBehavior_GetMember = typeof(IClayBehavior).GetMethod("GetMember");
+        private static readonly MethodInfo IClayBehavior_SetMember = typeof(IClayBehavior).GetMethod("SetMember");
+        private static readonly MethodInfo IClayBehavior_GetIndex = typeof(IClayBehavior).GetMethod("GetIndex");
+        private static readonly MethodInfo IClayBehavior_SetIndex = typeof(IClayBehavior).GetMethod("SetIndex");
+        private static readonly MethodInfo IClayBehavior_BinaryOperation = typeof(IClayBehavior).GetMethod("BinaryOperation");
+        private static readonly MethodInfo IClayBehavior_Convert = typeof(IClayBehavior).GetMethod("Convert");
+        // ReSharper restore InconsistentNaming
 
         public ClayMetaObject(object value, Expression expression)
             : base(expression, BindingRestrictions.Empty, value) {
@@ -29,12 +39,12 @@ namespace ClaySharp {
 
         public override DynamicMetaObject BindGetMember(GetMemberBinder binder) {
             Trace.WriteLine("BindGetMember");
-            
+
             var binderFallback = binder.FallbackGetMember(this);
 
             var call = Expression.Call(
                 GetClayBehavior(),
-                typeof(IClayBehavior).GetMethod("GetMember"),
+                IClayBehavior_GetMember,
                 Expression.Lambda(binderFallback.Expression),
                 Expression.Constant(binder.Name));
 
@@ -48,7 +58,7 @@ namespace ClaySharp {
 
             var call = Expression.Call(
                 GetClayBehavior(),
-                typeof(IClayBehavior).GetMethod("SetMember"),
+                IClayBehavior_SetMember,
                 Expression.Lambda(binderFallback.Expression),
                 Expression.Constant(binder.Name),
                 Expression.Convert(value.Expression, typeof(object)));
@@ -58,8 +68,6 @@ namespace ClaySharp {
 
         public override DynamicMetaObject BindInvokeMember(InvokeMemberBinder binder, DynamicMetaObject[] args) {
             Trace.WriteLine("BindInvokeMember");
-            
-
 
             var argValues = Expression.NewArrayInit(typeof(object), args.Select(x => Expression.Convert(x.Expression, typeof(Object))));
             var argNames = Expression.Constant(binder.CallInfo.ArgumentNames, typeof(IEnumerable<string>));
@@ -69,14 +77,13 @@ namespace ClaySharp {
 
             var call = Expression.Call(
                 GetClayBehavior(),
-                typeof(IClayBehavior).GetMethod("InvokeMember"),
+                IClayBehavior_InvokeMember,
                 Expression.Lambda(binderFallback.Expression),
                 GetLimitedSelf(),
                 Expression.Constant(binder.Name),
                 argNamedEnumerable);
 
             return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderFallback.Restrictions));
-
         }
 
 
@@ -89,7 +96,7 @@ namespace ClaySharp {
 
             var call = Expression.Call(
                 GetClayBehavior(),
-                typeof(IClayBehavior).GetMethod("Convert"),
+                IClayBehavior_Convert,
                 Expression.Lambda(Expression.Convert(binderFallback.Expression, typeof(Object))),
                 Expression,
                 Expression.Constant(binder.Type),
@@ -115,7 +122,7 @@ namespace ClaySharp {
 
             var call = Expression.Call(
                 GetClayBehavior(),
-                typeof(IClayBehavior).GetMethod("GetIndex"),
+                IClayBehavior_GetIndex,
                 Expression.Lambda(binderFallback.Expression),
                 a2);
 
@@ -131,7 +138,7 @@ namespace ClaySharp {
 
             var call = Expression.Call(
                 GetClayBehavior(),
-                typeof(IClayBehavior).GetMethod("SetIndex"),
+                IClayBehavior_SetIndex,
                 Expression.Lambda(binderFallback.Expression),
                 a2,
                 Expression.Convert(value.Expression, typeof(object)));
@@ -146,7 +153,22 @@ namespace ClaySharp {
 
         public override DynamicMetaObject BindInvoke(InvokeBinder binder, DynamicMetaObject[] args) {
             Trace.WriteLine("BindInvoke");
-            throw new NotImplementedException();
+
+            var argValues = Expression.NewArrayInit(typeof(object), args.Select(x => Expression.Convert(x.Expression, typeof(Object))));
+            var argNames = Expression.Constant(binder.CallInfo.ArgumentNames, typeof(IEnumerable<string>));
+            var argNamedEnumerable = Expression.Call(typeof(Arguments).GetMethod("From"), argValues, argNames);
+
+            var binderFallback = binder.FallbackInvoke(this, args);
+
+            var call = Expression.Call(
+                GetClayBehavior(),
+                IClayBehavior_InvokeMember,
+                Expression.Lambda(binderFallback.Expression),
+                GetLimitedSelf(),
+                Expression.Constant(null, typeof(string)),
+                argNamedEnumerable);
+
+            return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderFallback.Restrictions));
         }
 
         public override DynamicMetaObject BindCreateInstance(CreateInstanceBinder binder, DynamicMetaObject[] args) {
@@ -164,7 +186,7 @@ namespace ClaySharp {
 
             var call = Expression.Call(
                 GetClayBehavior(),
-                typeof(IClayBehavior).GetMethod("BinaryOperation"),
+                IClayBehavior_BinaryOperation,
                 Expression.Constant(null, typeof(Func<object>)),
                 Expression.Constant(binder.Operation),
                 Expression.Convert(arg.Expression, typeof(object)));

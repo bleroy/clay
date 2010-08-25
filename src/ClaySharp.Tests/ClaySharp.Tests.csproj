@@ -46,6 +46,7 @@
     <Compile Include="Behaviors\ArrayBehaviorTests.cs" />
     <Compile Include="Behaviors\ArrayPropAssignmentBehavior.cs" />
     <Compile Include="Behaviors\ClayFactoryBehaviorTests.cs" />
+    <Compile Include="Binders\InvokeBinderTests.cs" />
     <Compile Include="ClayTests.cs" />
     <Compile Include="BinderFallbackTests.cs" />
     <Compile Include="DefaultClayActivatorTests.cs" />
