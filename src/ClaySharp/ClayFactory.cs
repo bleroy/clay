@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using ClaySharp.Behaviors;
+﻿using ClaySharp.Behaviors;
 
 namespace ClaySharp {
     public class ClayFactory : Clay {
