@@ -68,7 +68,7 @@ namespace ClaySharp {
 
         public override DynamicMetaObject BindInvokeMember(InvokeMemberBinder binder, DynamicMetaObject[] args) {
             Trace.WriteLine("BindInvokeMember");
-
+            
             var argValues = Expression.NewArrayInit(typeof(object), args.Select(x => Expression.Convert(x.Expression, typeof(Object))));
             var argNames = Expression.Constant(binder.CallInfo.ArgumentNames, typeof(IEnumerable<string>));
             var argNamedEnumerable = Expression.Call(typeof(Arguments).GetMethod("From"), argValues, argNames);

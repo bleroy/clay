@@ -8,7 +8,8 @@ namespace ClaySharp {
         private const string SetPrefix = "set_";
 
         public void Intercept(IInvocation invocation) {
-            if (invocation.InvocationTarget != null) {
+            var invocationDestinedForSelf = ReferenceEquals(invocation.InvocationTarget, invocation.Proxy);
+            if (!invocationDestinedForSelf) {
                 // don't intercept mixins
                 invocation.Proceed();
                 return;

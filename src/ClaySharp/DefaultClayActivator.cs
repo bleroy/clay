@@ -11,8 +11,7 @@ namespace ClaySharp {
     public class DefaultClayActivator : IClayActivator {
         static readonly IProxyBuilder _builder = new DefaultProxyBuilder();
 
-        public dynamic CreateInstance<TBase>(IEnumerable<IClayBehavior> behaviors, IEnumerable<object> arguments) {
-            var baseType = typeof(TBase);
+        public dynamic CreateInstance(Type baseType, IEnumerable<IClayBehavior> behaviors, IEnumerable<object> arguments) {
             var isDynamicMetaObjectProvider = typeof(IDynamicMetaObjectProvider).IsAssignableFrom(baseType);
             var isClayBehaviorProvider = typeof(IClayBehaviorProvider).IsAssignableFrom(baseType);
 

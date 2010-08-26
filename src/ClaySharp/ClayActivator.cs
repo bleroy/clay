@@ -10,12 +10,18 @@ namespace ClaySharp {
 
         public static Func<IClayActivator> ServiceLocator { get; set; }
 
-        public static dynamic CreateInstance<TBase>(IEnumerable<IClayBehavior> behaviors, params object[] arguments) {
-            return ServiceLocator().CreateInstance<TBase>(behaviors, arguments);
-        }
 
         public static dynamic CreateInstance(IEnumerable<IClayBehavior> behaviors, params object[] arguments) {
-            return CreateInstance<Clay>(behaviors, arguments);
+            return ServiceLocator().CreateInstance(typeof(Clay), behaviors, arguments);
         }
+
+        public static dynamic CreateInstance(Type baseType, IEnumerable<IClayBehavior> behaviors, params object[] arguments) {
+            return ServiceLocator().CreateInstance(baseType, behaviors, arguments);
+        }
+
+        public static dynamic CreateInstance<TBase>(IEnumerable<IClayBehavior> behaviors, params object[] arguments) {
+            return ServiceLocator().CreateInstance(typeof(TBase), behaviors, arguments);
+        }
+
     }
 }
