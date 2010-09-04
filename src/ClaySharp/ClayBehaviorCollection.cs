@@ -13,12 +13,12 @@ namespace ClaySharp {
             return this.Aggregate(proceed, linker)();
         }
 
-        public object GetMember(Func<object> proceed, string name) {
-            return Execute(proceed, (next, behavior) => () => behavior.GetMember(next, name));
+        public object GetMember(Func<object> proceed, object self, string name) {
+            return Execute(proceed, (next, behavior) => () => behavior.GetMember(next, self, name));
         }
 
-        public object SetMember(Func<object> proceed, string name, object value) {
-            return Execute(proceed, (next, behavior) => () => behavior.SetMember(next, name, value));
+        public object SetMember(Func<object> proceed, object self, string name, object value) {
+            return Execute(proceed, (next, behavior) => () => behavior.SetMember(next, self, name, value));
         }
 
         public object InvokeMember(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {

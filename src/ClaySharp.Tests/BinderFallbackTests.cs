@@ -13,10 +13,10 @@ namespace ClaySharp.Tests {
             public override object InvokeMember(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
                 return name == "Sample" ? "Data" : proceed();
             }
-            public override object GetMember(Func<object> proceed, string name) {
+            public override object GetMember(Func<object> proceed, object self, string name) {
                 return name == "Sample" ? "Data" : proceed();
             }
-            public override object SetMember(Func<object> proceed, string name, object value) {
+            public override object SetMember(Func<object> proceed, object self, string name, object value) {
                 return name == "Sample" ? "Data" : proceed();
             }
         }

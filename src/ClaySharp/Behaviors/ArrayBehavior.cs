@@ -15,7 +15,7 @@ namespace ClaySharp.Behaviors {
             return IfSingleInteger(keys, key => _data[key] = value, proceed);
         }
 
-        public override object GetMember(Func<object> proceed, string name) {
+        public override object GetMember(Func<object> proceed, object self, string name) {
             switch (name) {
                 case "Length":
                 case "Count":
@@ -54,7 +54,7 @@ namespace ClaySharp.Behaviors {
             }
 
             if (!args.Any()) {
-                return GetMember(proceed, name);
+                return GetMember(proceed, self, name);
             }
 
             return proceed();
@@ -119,7 +119,7 @@ namespace ClaySharp.Behaviors {
                 return proceed();
             }
 
-            public override object GetMember(Func<object> proceed, string name) {
+            public override object GetMember(Func<object> proceed, object self, string name) {
                 switch (name) {
                     case "Current":
                         return _enumerator.Current;

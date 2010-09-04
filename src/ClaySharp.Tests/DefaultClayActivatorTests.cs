@@ -148,7 +148,7 @@ namespace ClaySharp.Tests {
                 }
                 return proceed();
             }
-            public override object GetMember(Func<object> proceed, string name) {
+            public override object GetMember(Func<object> proceed, object self, string name) {
                 if (name == "Hello") {
                     return "[" + proceed() + "]";
                 }

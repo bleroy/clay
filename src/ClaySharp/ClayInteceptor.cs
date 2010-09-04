@@ -25,6 +25,7 @@ namespace ClaySharp {
                             invocation.Proceed();
                             return invocation.ReturnValue;
                         },
+                        invocation.Proxy,
                         invocationMethod.Name.Substring(GetPrefix.Length));
                     return;
                 }
@@ -35,7 +36,9 @@ namespace ClaySharp {
                         () => {
                             invocation.Proceed();
                             return invocation.ReturnValue;
-                        }, invocationMethod.Name.Substring(SetPrefix.Length),
+                        }, 
+                        invocation.Proxy,
+                        invocationMethod.Name.Substring(SetPrefix.Length),
                         invocation.Arguments.Single());
                     return;
                 }

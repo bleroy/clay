@@ -7,22 +7,22 @@ namespace ClaySharp.Behaviors {
         readonly Dictionary<object, object> _props = new Dictionary<object, object>();
 
 
-        public override object GetMember(Func<object> proceed, string name) {
+        public override object GetMember(Func<object> proceed, object self, string name) {
             object value;
             return _props.TryGetValue(name, out value) ? value : null;
         }
 
-        public override object SetMember(Func<object> proceed, string name, object value) {
+        public override object SetMember(Func<object> proceed, object self, string name, object value) {
             return _props[name] = value;
         }
 
-        public override object InvokeMember(Func<object> proceed, dynamic self, string name, INamedEnumerable<object> args) {
+        public override object InvokeMember(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
             if (!args.Any()) {
-                return GetMember(proceed, name);
+                return GetMember(proceed, self, name);
             }
 
             if (args.Count() == 1) {
-                SetMember(proceed, name, args.Single());
+                SetMember(proceed, self, name, args.Single());
                 return self;
             }
 

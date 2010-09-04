@@ -46,6 +46,7 @@ namespace ClaySharp {
                 GetClayBehavior(),
                 IClayBehavior_GetMember,
                 Expression.Lambda(binderFallback.Expression),
+                GetLimitedSelf(),
                 Expression.Constant(binder.Name));
 
             return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderFallback.Restrictions));
@@ -60,6 +61,7 @@ namespace ClaySharp {
                 GetClayBehavior(),
                 IClayBehavior_SetMember,
                 Expression.Lambda(binderFallback.Expression),
+                GetLimitedSelf(),
                 Expression.Constant(binder.Name),
                 Expression.Convert(value.Expression, typeof(object)));
 

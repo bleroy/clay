@@ -146,6 +146,10 @@ namespace ClaySharp.Implementation {
                 }
             }
         }
+
+        public static INamedEnumerable<object> Empty() {
+            return From(Enumerable.Empty<object>(), Enumerable.Empty<string>());
+        }
     }
 
 }
