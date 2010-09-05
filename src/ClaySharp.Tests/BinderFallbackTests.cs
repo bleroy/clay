@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ClaySharp.Behaviors;
 using Microsoft.CSharp.RuntimeBinder;
 using NUnit.Framework;
 
@@ -118,6 +119,10 @@ namespace ClaySharp.Tests {
 
         }
 
+        public interface IAlpha {
+            string Hello();
+            string Foo();
+        }
         public class Alpha {
             public virtual string Hello() {
                 return "World";
@@ -137,13 +142,19 @@ namespace ClaySharp.Tests {
 
         [Test]
         public void TestInvokePaths() {
-            var dynamically = ClayActivator.CreateInstance<Alpha>(new[] { new AlphaBehavior() });
+            var dynamically = ClayActivator.CreateInstance<Alpha>(new IClayBehavior[] { 
+                new InterfaceProxyBehavior(), 
+                new AlphaBehavior() 
+            });
             Alpha statically = dynamically;
+            IAlpha interfacially = dynamically;
 
             Assert.That(dynamically.Hello(), Is.EqualTo("World-"));
             Assert.That(statically.Hello(), Is.EqualTo("World-"));
+            Assert.That(interfacially.Hello(), Is.EqualTo("World-"));
 
             Assert.That(dynamically.Foo(), Is.EqualTo("Bar-"));
+            Assert.That(interfacially.Foo(), Is.EqualTo("Bar-"));
 
             Assert.Throws<RuntimeBinderException>(() => dynamically.MissingNotHandled());
         }
