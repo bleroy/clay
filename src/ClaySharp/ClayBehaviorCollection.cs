@@ -40,5 +40,17 @@ namespace ClaySharp {
         public object BinaryOperation(Func<object> proceed, ExpressionType operation, object value) {
             return Execute(proceed, (next, behavior) => () => behavior.BinaryOperation(next, operation, value));
         }
+
+        public object InvokeMemberMissing(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
+            return Execute(proceed, (next, behavior) => () => behavior.InvokeMemberMissing(next, self, name, args));
+        }
+
+        public object GetMemberMissing(Func<object> proceed, object self, string name) {
+            return Execute(proceed, (next, behavior) => () => behavior.GetMemberMissing(next, self, name));
+        }
+
+        public object SetMemberMissing(Func<object> proceed, object self, string name, object value) {
+            return Execute(proceed, (next, behavior) => () => behavior.SetMemberMissing(next, self, name, value));
+        }
     }
 }

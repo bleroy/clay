@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Castle.Core.Interceptor;
+using ClaySharp.Implementation;
 
 namespace ClaySharp {
     public class ClayInteceptor : IInterceptor {
@@ -36,10 +37,19 @@ namespace ClaySharp {
                         () => {
                             invocation.Proceed();
                             return invocation.ReturnValue;
-                        }, 
+                        },
                         invocation.Proxy,
                         invocationMethod.Name.Substring(SetPrefix.Length),
                         invocation.Arguments.Single());
+                    return;
+                }
+
+                if (!invocationMethod.IsSpecialName) {
+                    invocation.ReturnValue = behaviorProvider.Behavior.InvokeMember(
+                        () => { invocation.Proceed(); return invocation.ReturnValue; },
+                        invocation.Proxy,
+                        invocationMethod.Name,
+                        Arguments.From(invocation.Arguments, Enumerable.Empty<string>()));
                     return;
                 }
             }

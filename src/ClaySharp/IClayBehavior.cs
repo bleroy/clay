@@ -12,6 +12,10 @@ namespace ClaySharp {
 
         object Convert(Func<object> proceed, object self, Type type, bool isExplicit);
         object BinaryOperation(Func<object> proceed, ExpressionType operation, object value);
+
+        object InvokeMemberMissing(Func<object> proceed, object self, string name, INamedEnumerable<object> args);
+        object GetMemberMissing(Func<object> proceed, object self, string name);
+        object SetMemberMissing(Func<object> proceed, object self, string name, object value);
     }
 
     public interface INamedEnumerable<T> : IEnumerable<T> {

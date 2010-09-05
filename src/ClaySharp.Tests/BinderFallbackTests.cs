@@ -31,9 +31,9 @@ namespace ClaySharp.Tests {
             }
 
             private static bool IsIndexZero(IEnumerable<object> keys) {
-                return keys.Count() == 1 
-                    && keys.Single().GetType()==typeof(int)
-                    &&keys.Cast<int>().Single()==0;
+                return keys.Count() == 1
+                    && keys.Single().GetType() == typeof(int)
+                    && keys.Cast<int>().Single() == 0;
             }
         }
 
@@ -116,6 +116,67 @@ namespace ClaySharp.Tests {
 
             Assert.That(ex2.Message, Is.StringMatching(@"Cannot apply indexing with \[\] to an expression of type .*"));
 
+        }
+
+        public class Alpha {
+            public virtual string Hello() {
+                return "World";
+            }
+        }
+
+        public class AlphaBehavior : ClayBehavior {
+            public override object InvokeMember(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
+                return proceed() + "-";
+            }
+            public override object InvokeMemberMissing(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
+                if (name == "Foo")
+                    return "Bar";
+                return proceed();
+            }
+        }
+
+        [Test]
+        public void TestInvokePaths() {
+            var dynamically = ClayActivator.CreateInstance<Alpha>(new[] { new AlphaBehavior() });
+            Alpha statically = dynamically;
+
+            Assert.That(dynamically.Hello(), Is.EqualTo("World-"));
+            Assert.That(statically.Hello(), Is.EqualTo("World-"));
+
+            Assert.That(dynamically.Foo(), Is.EqualTo("Bar-"));
+
+            Assert.Throws<RuntimeBinderException>(() => dynamically.MissingNotHandled());
+        }
+
+
+        public class Beta {
+            public virtual string Hello {
+                get { return "World"; }
+            }
+        }
+
+        public class BetaBehavior : ClayBehavior {
+            public override object GetMember(Func<object> proceed, object self, string name) {
+                return proceed() + "-";
+            }
+            public override object GetMemberMissing(Func<object> proceed, object self, string name) {
+                if (name == "Foo")
+                    return "Bar";
+                return proceed();
+            }
+        }
+
+        [Test]
+        public void TestGetPaths() {
+            var dynamically = ClayActivator.CreateInstance<Beta>(new[] { new BetaBehavior() });
+            Beta statically = dynamically;
+
+            Assert.That(dynamically.Hello, Is.EqualTo("World-"));
+            Assert.That(statically.Hello, Is.EqualTo("World-"));
+
+            Assert.That(dynamically.Foo, Is.EqualTo("Bar-"));
+
+            Assert.Throws<RuntimeBinderException>(() => { var x = dynamically.MissingPropNotHandled; });
         }
     }
 }

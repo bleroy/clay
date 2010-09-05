@@ -131,11 +131,11 @@ namespace ClaySharp.Tests {
             IClayPlus interfacially = alpha;
 
             Assert.That(dynamically.Hello, Is.EqualTo("[World]"));
-            //Assert.That(statically.Hello, Is.EqualTo("[World]"));
+            Assert.That(statically.Hello, Is.EqualTo("[World]"));
             Assert.That(interfacially.Hello, Is.EqualTo("[World]"));
 
             Assert.That(dynamically.Add(3, 4), Is.EqualTo(9));
-            //Assert.That(statically.Add(3, 4), Is.EqualTo(9));
+            Assert.That(statically.Add(3, 4), Is.EqualTo(9));
             Assert.That(interfacially.Add(3, 4), Is.EqualTo(9));
             Assert.That(interfacially.Add(3, 5), Is.EqualTo(10));
             Assert.That(interfacially.Add(3, 6), Is.EqualTo(11));
