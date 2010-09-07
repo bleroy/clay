@@ -16,6 +16,7 @@ namespace ClaySharp {
         object InvokeMemberMissing(Func<object> proceed, object self, string name, INamedEnumerable<object> args);
         object GetMemberMissing(Func<object> proceed, object self, string name);
         object SetMemberMissing(Func<object> proceed, object self, string name, object value);
+        object ConvertMissing(Func<object> proceed, object self, Type type, bool isExplicit);
     }
 
     public interface INamedEnumerable<T> : IEnumerable<T> {

@@ -15,5 +15,6 @@ namespace ClaySharp {
         public virtual object InvokeMemberMissing(Func<object> proceed, object self, string name, INamedEnumerable<object> args) { return proceed(); }
         public virtual object GetMemberMissing(Func<object> proceed, object self, string name) { return proceed(); }
         public virtual object SetMemberMissing(Func<object> proceed, object self, string name, object value) { return proceed(); }
+        public virtual object ConvertMissing(Func<object> proceed, object self, Type type, bool isExplicit) { return proceed(); }
     }
 }

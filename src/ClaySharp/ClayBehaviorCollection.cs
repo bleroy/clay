@@ -52,5 +52,9 @@ namespace ClaySharp {
         public object SetMemberMissing(Func<object> proceed, object self, string name, object value) {
             return Execute(proceed, (next, behavior) => () => behavior.SetMemberMissing(next, self, name, value));
         }
+
+        public object ConvertMissing(Func<object> proceed, object self, Type type, bool isExplicit) {
+            return Execute(proceed, (next, behavior) => () => behavior.ConvertMissing(next, self, type, isExplicit));
+        }
     }
 }

@@ -18,6 +18,10 @@ namespace ClaySharp.Behaviors {
             if (args.Any())
                 return proceed();
 
+            if (name == "ToString") {
+                return string.Empty;
+            }
+
             return Nil.Instance;
         }
 

@@ -15,7 +15,7 @@ namespace ClaySharp.Behaviors {
         private static readonly IProxyBuilder ProxyBuilder = new DefaultProxyBuilder();
         static readonly MethodInfo DynamicMetaObjectProviderGetMetaObject = typeof(IDynamicMetaObjectProvider).GetMethod("GetMetaObject");
 
-        public override object Convert(Func<object> proceed, object self, Type type, bool isExplicit) {
+        public override object ConvertMissing(Func<object> proceed, object self, Type type, bool isExplicit) {
             if (type.IsInterface && type != typeof(IDynamicMetaObjectProvider)) {
                 var proxyType = ProxyBuilder.CreateInterfaceProxyTypeWithoutTarget(
                     type,

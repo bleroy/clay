@@ -21,6 +21,7 @@ namespace ClaySharp {
         private static readonly MethodInfo IClayBehavior_InvokeMemberMissing = typeof(IClayBehavior).GetMethod("InvokeMemberMissing");
         private static readonly MethodInfo IClayBehavior_GetMemberMissing = typeof(IClayBehavior).GetMethod("GetMemberMissing");
         private static readonly MethodInfo IClayBehavior_SetMemberMissing = typeof(IClayBehavior).GetMethod("SetMemberMissing");
+        private static readonly MethodInfo IClayBehavior_ConvertMissing = typeof(IClayBehavior).GetMethod("ConvertMissing");
 
         // ReSharper restore InconsistentNaming
 
@@ -47,14 +48,14 @@ namespace ClaySharp {
 
             var binderDefault = binder.FallbackGetMember(this);
 
-            
+
             var missingLambda = Expression.Lambda(Expression.Call(
                 GetClayBehavior(),
                 IClayBehavior_GetMemberMissing,
                 Expression.Lambda(binderDefault.Expression),
                 GetLimitedSelf(),
                 Expression.Constant(binder.Name)));
-            
+
             var call = Expression.Call(
                 GetClayBehavior(),
                 IClayBehavior_GetMember,
@@ -71,7 +72,7 @@ namespace ClaySharp {
             Trace.WriteLine("BindSetMember");
 
             var binderDefault = binder.FallbackSetMember(this, value);
-            
+
             var missingLambda = Expression.Lambda(Expression.Call(
                 GetClayBehavior(),
                 IClayBehavior_SetMemberMissing,
@@ -79,7 +80,7 @@ namespace ClaySharp {
                 GetLimitedSelf(),
                 Expression.Constant(binder.Name),
                 Expression.Convert(value.Expression, typeof(object))));
-            
+
             var call = Expression.Call(
                 GetClayBehavior(),
                 IClayBehavior_SetMember,
@@ -109,7 +110,7 @@ namespace ClaySharp {
                 GetLimitedSelf(),
                 Expression.Constant(binder.Name),
                 argNamedEnumerable));
-            
+
             var call = Expression.Call(
                 GetClayBehavior(),
                 IClayBehavior_InvokeMember,
@@ -122,39 +123,36 @@ namespace ClaySharp {
                 call, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderDefault.Restrictions));
 
             return binder.FallbackInvokeMember(this, args, dynamicSuggestion);
-
-            //var binderFallback = binder.FallbackInvokeMember(this, args);
-            
-            //var call = Expression.Call(
-            //    GetClayBehavior(),
-            //    IClayBehavior_InvokeMember,
-            //    Expression.Lambda(binderFallback.Expression),
-            //    GetLimitedSelf(),
-            //    Expression.Constant(binder.Name),
-            //    argNamedEnumerable);
-
-            //return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderFallback.Restrictions));
         }
 
 
         public override DynamicMetaObject BindConvert(ConvertBinder binder) {
             Trace.WriteLine("BindConvert");
 
-            var binderFallback = binder.FallbackConvert(this);
+            var binderDefault = binder.FallbackConvert(this);
 
-            //TODO: all proceed Lambda expressions will likely need an object typecast... utility method...
+            var missingLambda = Expression.Lambda(Expression.Call(
+                GetClayBehavior(),
+                IClayBehavior_ConvertMissing,
+                Expression.Lambda(binderDefault.Expression),
+                GetLimitedSelf(),
+                Expression.Constant(binder.Type),
+                Expression.Constant(binder.Explicit)));
 
             var call = Expression.Call(
                 GetClayBehavior(),
                 IClayBehavior_Convert,
-                Expression.Lambda(Expression.Convert(binderFallback.Expression, typeof(Object))),
-                Expression,
+                missingLambda,
+                GetLimitedSelf(),
                 Expression.Constant(binder.Type),
                 Expression.Constant(binder.Explicit));
 
-            var convert = Expression.Convert(call, binder.Type);
+            var convertedCall = Expression.Convert(call, binder.ReturnType);
 
-            return new DynamicMetaObject(convert, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderFallback.Restrictions));
+            var dynamicSuggestion = new DynamicMetaObject(
+                convertedCall, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderDefault.Restrictions));
+
+            return binder.FallbackConvert(this, dynamicSuggestion);
         }
 
 
