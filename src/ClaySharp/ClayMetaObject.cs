@@ -62,7 +62,7 @@ namespace ClaySharp {
                 missingLambda,
                 GetLimitedSelf(),
                 Expression.Constant(binder.Name));
-
+            
             var dynamicSuggestion = new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderDefault.Restrictions));
 
             return binder.FallbackGetMember(this, dynamicSuggestion);
