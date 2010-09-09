@@ -57,9 +57,13 @@ namespace ClaySharp.Behaviors {
                     !invocation.Method.ReturnType.IsAssignableFrom(invocation.ReturnValue.GetType()) &&
                     invocation.ReturnValue is IClayBehaviorProvider) {
 
-                    var returnValueBehavior = ((IClayBehaviorProvider)invocation.ReturnValue).Behavior;
+                    var returnValueBehavior = ((IClayBehaviorProvider) invocation.ReturnValue).Behavior;
                     invocation.ReturnValue = returnValueBehavior.Convert(
-                        () => invocation.ReturnValue,
+                        () => returnValueBehavior.ConvertMissing(
+                            () => invocation.ReturnValue,
+                            invocation.ReturnValue,
+                            invocation.Method.ReturnType,
+                            false),
                         invocation.ReturnValue,
                         invocation.Method.ReturnType,
                         false);

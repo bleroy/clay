@@ -134,7 +134,7 @@ namespace ClaySharp {
             var missingLambda = Expression.Lambda(Expression.Call(
                 GetClayBehavior(),
                 IClayBehavior_ConvertMissing,
-                Expression.Lambda(binderDefault.Expression),
+                Expression.Lambda(Expression.Convert(binderDefault.Expression, typeof(object))),
                 GetLimitedSelf(),
                 Expression.Constant(binder.Type),
                 Expression.Constant(binder.Explicit)));
@@ -152,7 +152,8 @@ namespace ClaySharp {
             var dynamicSuggestion = new DynamicMetaObject(
                 convertedCall, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderDefault.Restrictions));
 
-            return binder.FallbackConvert(this, dynamicSuggestion);
+            //return binder.FallbackConvert(this, dynamicSuggestion);
+            return dynamicSuggestion;
         }
 
 

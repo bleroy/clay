@@ -26,6 +26,9 @@ namespace ClaySharp.Behaviors {
         }
 
         public override object Convert(Func<object> proceed, object self, Type type, bool isExplicit) {
+            if (type.IsInterface)
+                return proceed();
+
             return null;
         }
 
