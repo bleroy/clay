@@ -57,6 +57,7 @@
     <Compile Include="DefaultClayActivator.cs" />
     <Compile Include="IClayActivator.cs" />
     <Compile Include="IClayBehaviorProvider.cs" />
+    <Compile Include="ILogger.cs" />
     <Compile Include="Implementation\Arguments.cs" />
     <Compile Include="Nil.cs" />
     <Compile Include="Behaviors\NilBehavior.cs" />

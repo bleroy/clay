@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -29,6 +28,8 @@ namespace ClaySharp {
             : base(expression, BindingRestrictions.Empty, value) {
         }
 
+        public ILogger Logger { get; set; }
+
         private Expression GetLimitedSelf() {
             if (Expression.Type == LimitType || Expression.Type.IsEquivalentTo(LimitType)) {
                 return Expression;
@@ -44,7 +45,7 @@ namespace ClaySharp {
 
 
         public override DynamicMetaObject BindGetMember(GetMemberBinder binder) {
-            Trace.WriteLine("BindGetMember");
+            Logger.Log(LogLevel.Debug, null, "BindGetMember");
 
             var binderDefault = binder.FallbackGetMember(this);
 
@@ -69,7 +70,7 @@ namespace ClaySharp {
         }
 
         public override DynamicMetaObject BindSetMember(SetMemberBinder binder, DynamicMetaObject value) {
-            Trace.WriteLine("BindSetMember");
+            Logger.Log(LogLevel.Debug, null, "BindSetMember");
 
             var binderDefault = binder.FallbackSetMember(this, value);
 
@@ -95,7 +96,7 @@ namespace ClaySharp {
         }
 
         public override DynamicMetaObject BindInvokeMember(InvokeMemberBinder binder, DynamicMetaObject[] args) {
-            Trace.WriteLine("BindInvokeMember");
+            Logger.Log(LogLevel.Debug, null, "BindInvokeMember");
 
             var argValues = Expression.NewArrayInit(typeof(object), args.Select(x => Expression.Convert(x.Expression, typeof(Object))));
             var argNames = Expression.Constant(binder.CallInfo.ArgumentNames, typeof(IEnumerable<string>));
@@ -127,7 +128,7 @@ namespace ClaySharp {
 
 
         public override DynamicMetaObject BindConvert(ConvertBinder binder) {
-            Trace.WriteLine("BindConvert");
+            Logger.Log(LogLevel.Debug, null, "BindConvert");
 
             var binderDefault = binder.FallbackConvert(this);
 
@@ -158,12 +159,12 @@ namespace ClaySharp {
 
 
         public override DynamicMetaObject BindDeleteMember(DeleteMemberBinder binder) {
-            Trace.WriteLine("BindUnaryOperation");
+            Logger.Log(LogLevel.Debug, null, "BindUnaryOperation");
             throw new NotImplementedException();
         }
 
         public override DynamicMetaObject BindGetIndex(GetIndexBinder binder, DynamicMetaObject[] indexes) {
-            Trace.WriteLine("BindGetIndex");
+            Logger.Log(LogLevel.Debug, null, "BindGetIndex");
 
             var a2 = Expression.NewArrayInit(typeof(object), indexes.Select(x => Expression.Convert(x.Expression, typeof(Object))));
 
@@ -179,7 +180,7 @@ namespace ClaySharp {
         }
 
         public override DynamicMetaObject BindSetIndex(SetIndexBinder binder, DynamicMetaObject[] indexes, DynamicMetaObject value) {
-            Trace.WriteLine("BindSetIndex");
+            Logger.Log(LogLevel.Debug, null, "BindSetIndex");
 
             var a2 = Expression.NewArrayInit(typeof(object), indexes.Select(x => Expression.Convert(x.Expression, typeof(Object))));
 
@@ -196,12 +197,12 @@ namespace ClaySharp {
         }
 
         public override DynamicMetaObject BindDeleteIndex(DeleteIndexBinder binder, DynamicMetaObject[] indexes) {
-            Trace.WriteLine("BindDeleteIndex");
+            Logger.Log(LogLevel.Debug, null, "BindDeleteIndex");
             throw new NotImplementedException();
         }
 
         public override DynamicMetaObject BindInvoke(InvokeBinder binder, DynamicMetaObject[] args) {
-            Trace.WriteLine("BindInvoke");
+            Logger.Log(LogLevel.Debug, null, "BindInvoke");
 
             var argValues = Expression.NewArrayInit(typeof(object), args.Select(x => Expression.Convert(x.Expression, typeof(Object))));
             var argNames = Expression.Constant(binder.CallInfo.ArgumentNames, typeof(IEnumerable<string>));
@@ -221,17 +222,17 @@ namespace ClaySharp {
         }
 
         public override DynamicMetaObject BindCreateInstance(CreateInstanceBinder binder, DynamicMetaObject[] args) {
-            Trace.WriteLine("BindCreateInstance");
+            Logger.Log(LogLevel.Debug, null, "BindCreateInstance");
             throw new NotImplementedException();
         }
 
         public override DynamicMetaObject BindUnaryOperation(UnaryOperationBinder binder) {
-            Trace.WriteLine("BindUnaryOperation");
+            Logger.Log(LogLevel.Debug, null, "BindUnaryOperation");
             throw new NotImplementedException();
         }
 
         public override DynamicMetaObject BindBinaryOperation(BinaryOperationBinder binder, DynamicMetaObject arg) {
-            Trace.WriteLine("BindBinaryOperation");
+            Logger.Log(LogLevel.Debug, null, "BindBinaryOperation");
 
             var binderFallback = binder.FallbackBinaryOperation(this, arg);
 
@@ -246,7 +247,7 @@ namespace ClaySharp {
         }
 
         public override IEnumerable<string> GetDynamicMemberNames() {
-            Trace.WriteLine("GetDynamicMemberNames");
+            Logger.Log(LogLevel.Debug, null, "GetDynamicMemberNames");
             throw new NotImplementedException();
         }
     }
