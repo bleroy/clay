@@ -57,14 +57,14 @@ namespace ClaySharp {
                 IClayBehavior_GetMemberMissing,
                 Expression.Lambda(binderDefault.Expression),
                 GetLimitedSelf(),
-                Expression.Constant(binder.Name)));
+                Expression.Constant(binder.Name, typeof(string))));
 
             var call = Expression.Call(
                 GetClayBehavior(),
                 IClayBehavior_GetMember,
                 missingLambda,
                 GetLimitedSelf(),
-                Expression.Constant(binder.Name));
+                Expression.Constant(binder.Name, typeof(string)));
             
             var dynamicSuggestion = new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderDefault.Restrictions));
 
@@ -83,7 +83,7 @@ namespace ClaySharp {
                 IClayBehavior_SetMemberMissing,
                 Expression.Lambda(binderDefault.Expression),
                 GetLimitedSelf(),
-                Expression.Constant(binder.Name),
+                Expression.Constant(binder.Name, typeof(string)),
                 Expression.Convert(value.Expression, typeof(object))));
 
             var call = Expression.Call(
@@ -91,7 +91,7 @@ namespace ClaySharp {
                 IClayBehavior_SetMember,
                 missingLambda,
                 GetLimitedSelf(),
-                Expression.Constant(binder.Name),
+                Expression.Constant(binder.Name, typeof(string)),
                 Expression.Convert(value.Expression, typeof(object)));
 
             var dynamicSuggestion = new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType).Merge(binderDefault.Restrictions));
@@ -115,7 +115,7 @@ namespace ClaySharp {
                 IClayBehavior_InvokeMemberMissing,
                 Expression.Lambda(binderDefault.Expression),
                 GetLimitedSelf(),
-                Expression.Constant(binder.Name),
+                Expression.Constant(binder.Name, typeof(string)),
                 argNamedEnumerable));
 
             var call = Expression.Call(
@@ -123,7 +123,7 @@ namespace ClaySharp {
                 IClayBehavior_InvokeMember,
                 missingLambda,
                 GetLimitedSelf(),
-                Expression.Constant(binder.Name),
+                Expression.Constant(binder.Name, typeof(string)),
                 argNamedEnumerable);
 
             var dynamicSuggestion = new DynamicMetaObject(
@@ -145,16 +145,16 @@ namespace ClaySharp {
                 IClayBehavior_ConvertMissing,
                 Expression.Lambda(Expression.Convert(binderDefault.Expression, typeof(object))),
                 GetLimitedSelf(),
-                Expression.Constant(binder.Type),
-                Expression.Constant(binder.Explicit)));
+                Expression.Constant(binder.Type, typeof(Type)),
+                Expression.Constant(binder.Explicit, typeof(bool))));
 
             var call = Expression.Call(
                 GetClayBehavior(),
                 IClayBehavior_Convert,
                 missingLambda,
                 GetLimitedSelf(),
-                Expression.Constant(binder.Type),
-                Expression.Constant(binder.Explicit));
+                Expression.Constant(binder.Type, typeof(Type)),
+                Expression.Constant(binder.Explicit, typeof(bool)));
 
             var convertedCall = Expression.Convert(call, binder.ReturnType);
 
@@ -268,7 +268,7 @@ namespace ClaySharp {
                 GetClayBehavior(),
                 IClayBehavior_BinaryOperation,
                 Expression.Lambda(binderFallback.Expression),
-                Expression.Constant(binder.Operation),
+                Expression.Constant(binder.Operation, typeof(ExpressionType)),
                 Expression.Convert(arg.Expression, typeof(object)));
 
             return new DynamicMetaObject(call, BindingRestrictions.GetTypeRestriction(Expression, LimitType));
