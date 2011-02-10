@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq.Expressions;
 using ClaySharp.Behaviors;
 using NUnit.Framework;
 
@@ -184,7 +186,7 @@ namespace ClaySharp.Tests {
         [Test]
         public void CreateArraySyntax() {
             var directory = New.Array(
-                New.Person().Name("Louis").Aliases(new [] {"Lou"}),
+                New.Person().Name("Louis").Aliases(new[] { "Lou" }),
                 New.Person().Name("Bertrand").Aliases("bleroy", "boudin")
                 ).Name("Orchard folks");
 
@@ -223,7 +225,7 @@ namespace ClaySharp.Tests {
             var otherPerson = New.Person(new {
                 FirstName = "Bertrand",
                 LastName = "Le Roy"
-                });
+            });
             Assert.That(otherPerson.FirstName, Is.EqualTo("Bertrand"));
             Assert.That(otherPerson.LastName, Is.EqualTo("Le Roy"));
 
@@ -245,7 +247,7 @@ namespace ClaySharp.Tests {
             Assert.That(people[1].LastName, Is.EqualTo("Le Roy"));
 
             var a = "";
-            foreach(var p in people) {
+            foreach (var p in people) {
                 a += p.FirstName + "|";
             }
             Assert.That(a, Is.EqualTo("Louis|Bertrand|"));
@@ -253,7 +255,7 @@ namespace ClaySharp.Tests {
             otherPerson.Aliases("bleroy", "BoudinFatal");
             Assert.That(otherPerson.Aliases.Count, Is.EqualTo(2));
 
-            person.Aliases(new[] {"Lou"});
+            person.Aliases(new[] { "Lou" });
             Assert.That(person.Aliases.Count, Is.EqualTo(1));
             person.Aliases.Add("loudej");
             Assert.That(person.Aliases.Count, Is.EqualTo(2));
@@ -281,6 +283,24 @@ namespace ClaySharp.Tests {
             Assert.That(x.Two, Is.EqualTo(2));
         }
 
+        [Test]
+        public void ClayMetaObjectCanBeUsedAsAnInternalImplementationDetail() {
+            dynamic augmented = new AugmentedObject();
+            Assert.That(augmented.Foo, Is.EqualTo("Bar"));
+        }
+
+        public class AugmentedObject : IDynamicMetaObjectProvider {
+
+            public DynamicMetaObject GetMetaObject(Expression parameter) {
+                return new ClayMetaObject(this, parameter, ex => Expression.Constant(new FooIsBar(), typeof(IClayBehavior)));
+            }
+
+            class FooIsBar : ClayBehavior {
+                public override object GetMemberMissing(Func<object> proceed, object self, string name) {
+                    return name == "Foo" ? "Bar" : base.GetMemberMissing(proceed, self, name);
+                }
+            }
+        }
     }
 
     public class ClayHelper {

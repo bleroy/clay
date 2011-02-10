@@ -28,6 +28,11 @@ namespace ClaySharp {
             : base(expression, BindingRestrictions.Empty, value) {
             Logger = NullLogger.Instance;
         }
+        
+        public ClayMetaObject(object value, Expression expression, Func<Expression,Expression> getClayBehavior)
+            : this(value,expression) {
+            _getClayBehavior = getClayBehavior;
+        }
 
         public ILogger Logger { get; set; }
 
@@ -38,10 +43,12 @@ namespace ClaySharp {
             return Expression.Convert(Expression, LimitType);
         }
 
-        private Expression GetClayBehavior() {
-            return Expression.Property(
-                Expression.Convert(Expression, typeof(IClayBehaviorProvider)),
+        readonly Func<Expression,Expression> _getClayBehavior = expr=> Expression.Property(
+                Expression.Convert(expr, typeof(IClayBehaviorProvider)),
                 "Behavior");
+
+        protected virtual Expression GetClayBehavior() {
+            return _getClayBehavior(Expression);
         }
 
 
