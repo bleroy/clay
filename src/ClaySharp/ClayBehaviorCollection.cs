@@ -21,6 +21,10 @@ namespace ClaySharp {
             return Execute(proceed, (next, behavior) => () => behavior.SetMember(next, self, name, value));
         }
 
+        public object GetMembers(Func<object> proceed, object self, IDictionary<string, object> members) {
+            return Execute(proceed, (next, behavior) => () => behavior.GetMembers(next, self, members));
+        }
+
         public object InvokeMember(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {
             return Execute(proceed, (next, behavior) => () => behavior.InvokeMember(next, self, name, args));
         }

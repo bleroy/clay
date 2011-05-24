@@ -10,6 +10,8 @@ namespace ClaySharp {
         object GetIndex(Func<object> proceed, IEnumerable<object> keys);
         object SetIndex(Func<object> proceed, IEnumerable<object> keys, object value);
 
+        object GetMembers(Func<object> proceed, object self, IDictionary<string, object> members);
+        
         object Convert(Func<object> proceed, object self, Type type, bool isExplicit);
         object BinaryOperation(Func<object> proceed, ExpressionType operation, object value);
 

@@ -7,7 +7,7 @@ using ClaySharp.Implementation;
 using Microsoft.CSharp.RuntimeBinder;
 
 namespace ClaySharp {
-    public class ClayInteceptor : IInterceptor {
+    public class ClayInterceptor : IInterceptor {
         private const string GetPrefix = "get_";
         private const string SetPrefix = "set_";
 

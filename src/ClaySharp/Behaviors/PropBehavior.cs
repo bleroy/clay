@@ -6,6 +6,13 @@ namespace ClaySharp.Behaviors {
     public class PropBehavior : ClayBehavior {
         readonly Dictionary<object, object> _props = new Dictionary<object, object>();
 
+        public override object GetMembers(System.Func<object> proceed, object self, IDictionary<string, object> members) {
+            foreach (var pair in _props) {
+                members.Add(pair.Key.ToString(), pair.Value);
+            }
+
+            return proceed();
+        }
 
         public override object GetMemberMissing(Func<object> proceed, object self, string name) {
             object value;

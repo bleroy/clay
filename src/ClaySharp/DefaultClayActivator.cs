@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
 using System.Linq.Expressions;
 using Castle.Core.Interceptor;
 using Castle.DynamicProxy;
@@ -38,8 +36,8 @@ namespace ClaySharp {
             }
 
             var proxyType = _builder.CreateClassProxy(baseType, options);
-
-            constructorArgs.Add(new IInterceptor[]{new ClayInteceptor()});
+            
+            constructorArgs.Add(new IInterceptor[]{new ClayInterceptor()});
             if (arguments != null)
                 constructorArgs.AddRange(arguments);
 

@@ -11,7 +11,8 @@ namespace ClaySharp {
         public virtual object SetIndex(Func<object> proceed, IEnumerable<object> keys, object value) { return proceed(); }
         public virtual object Convert(Func<object> proceed, object self, Type type, bool isExplicit) { return proceed(); }
         public virtual object BinaryOperation(Func<object> proceed, ExpressionType operation, object value) { return proceed(); }
-
+        public virtual object GetMembers(Func<object> proceed, object self, IDictionary<string, object> members) { return proceed(); }
+        
         public virtual object InvokeMemberMissing(Func<object> proceed, object self, string name, INamedEnumerable<object> args) { return proceed(); }
         public virtual object GetMemberMissing(Func<object> proceed, object self, string name) { return proceed(); }
         public virtual object SetMemberMissing(Func<object> proceed, object self, string name, object value) { return proceed(); }
