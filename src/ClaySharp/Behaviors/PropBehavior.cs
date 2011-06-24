@@ -36,14 +36,14 @@ namespace ClaySharp.Behaviors {
             return proceed();
         }
 
-        public override object GetIndex(Func<object> proceed, IEnumerable<object> keys) {
+        public override object GetIndex(Func<object> proceed, object self, IEnumerable<object> keys) {
             if (keys.Count() != 1) proceed();
 
             object value;
             return _props.TryGetValue(keys.Single(), out value) ? value : null;
         }
 
-        public override object SetIndex(Func<object> proceed, IEnumerable<object> keys, object value) {
+        public override object SetIndex(Func<object> proceed, object self, IEnumerable<object> keys, object value) {
             if (keys.Count() != 1) proceed();
 
             return _props[keys.Single()] = value;

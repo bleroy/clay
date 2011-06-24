@@ -29,20 +29,20 @@ namespace ClaySharp {
             return Execute(proceed, (next, behavior) => () => behavior.InvokeMember(next, self, name, args));
         }
 
-        public object GetIndex(Func<object> proceed, IEnumerable<object> keys) {
-            return Execute(proceed, (next, behavior) => () => behavior.GetIndex(next, keys));
+        public object GetIndex(Func<object> proceed, object self, IEnumerable<object> keys) {
+            return Execute(proceed, (next, behavior) => () => behavior.GetIndex(next, self, keys));
         }
 
-        public object SetIndex(Func<object> proceed, IEnumerable<object> keys, object value) {
-            return Execute(proceed, (next, behavior) => () => behavior.SetIndex(next, keys, value));
+        public object SetIndex(Func<object> proceed, object self, IEnumerable<object> keys, object value) {
+            return Execute(proceed, (next, behavior) => () => behavior.SetIndex(next, self, keys, value));
         }
 
         public object Convert(Func<object> proceed, object self, Type type, bool isExplicit) {
             return Execute(proceed, (next, behavior) => () => behavior.Convert(next, self, type, isExplicit));
         }
 
-        public object BinaryOperation(Func<object> proceed, ExpressionType operation, object value) {
-            return Execute(proceed, (next, behavior) => () => behavior.BinaryOperation(next, operation, value));
+        public object BinaryOperation(Func<object> proceed, object self, ExpressionType operation, object value) {
+            return Execute(proceed, (next, behavior) => () => behavior.BinaryOperation(next, self, operation, value));
         }
 
         public object InvokeMemberMissing(Func<object> proceed, object self, string name, INamedEnumerable<object> args) {

@@ -23,11 +23,11 @@ namespace ClaySharp.Tests {
         }
 
         class TestIndexBehavior : ClayBehavior {
-            public override object GetIndex(Func<object> proceed, IEnumerable<object> keys) {
+            public override object GetIndex(Func<object> proceed, object self, IEnumerable<object> keys) {
                 return IsIndexZero(keys) ? "Data" : proceed();
             }
 
-            public override object SetIndex(Func<object> proceed, IEnumerable<object> keys, object value) {
+            public override object SetIndex(Func<object> proceed, object self, IEnumerable<object> keys, object value) {
                 return IsIndexZero(keys) ? "Data" : proceed();
             }
 

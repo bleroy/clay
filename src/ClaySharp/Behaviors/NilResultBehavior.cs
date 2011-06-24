@@ -9,7 +9,7 @@ namespace ClaySharp.Behaviors {
             return proceed() ?? Nil.Instance;
         }
 
-        public override object GetIndex(Func<object> proceed, IEnumerable<object> keys) {
+        public override object GetIndex(Func<object> proceed, object self, IEnumerable<object> keys) {
             return proceed() ?? Nil.Instance;
         }
 

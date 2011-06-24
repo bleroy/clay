@@ -10,7 +10,7 @@ namespace ClaySharp.Behaviors {
             return Nil.Instance;
         }
 
-        public override object GetIndex(Func<object> proceed, IEnumerable<object> keys) {
+        public override object GetIndex(Func<object> proceed, object self, IEnumerable<object> keys) {
             return Nil.Instance;
         }
 
@@ -32,7 +32,7 @@ namespace ClaySharp.Behaviors {
             return null;
         }
 
-        public override object BinaryOperation(Func<object> proceed, ExpressionType operation, object value) {
+        public override object BinaryOperation(Func<object> proceed, object self, ExpressionType operation, object value) {
             switch (operation) {
                 case ExpressionType.Equal:
                     return ReferenceEquals(value, Nil.Instance) || value == null;
