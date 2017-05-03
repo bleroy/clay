@@ -62,7 +62,9 @@ public interface IPerson {
 
 //...
 
-var stronglyTypedPerson = (IPerson)person;
+IPerson typedPerson = person;
+// Look! IntelliSense! Compile-time checks!
+var fullName = $"{typedPerson.FirstName} {typedPerson.LastName}";
 ```
 
 ## Blog posts about Clay
