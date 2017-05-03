@@ -71,3 +71,4 @@ var fullName = $"{typedPerson.FirstName} {typedPerson.LastName}";
 
 * [Clay: malleable C# dynamic objects – part 1: why we need it](https://weblogs.asp.net/bleroy/clay-malleable-c-dynamic-objects-part-1-why-we-need-it)
 * [Clay: malleable C# dynamic objects – part 2](https://weblogs.asp.net/bleroy/clay-malleable-c-dynamic-objects-part-2)
+* [NuGet Package of the Week #6 - Dynamic, Malleable, Enjoyable Expando Objects with Clay](https://www.hanselman.com/blog/NuGetPackageOfTheWeek6DynamicMalleableEnjoyableExpandoObjectsWithClay.aspx)
